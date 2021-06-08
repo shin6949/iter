@@ -1,9 +1,5 @@
 package com.cos.instagram.service;
 
-import com.azure.storage.blob.BlobClient;
-import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.BlobServiceClient;
-import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.cos.instagram.domain.comment.Comment;
 import com.cos.instagram.domain.image.Image;
 import com.cos.instagram.domain.image.ImageRepository;
@@ -15,16 +11,11 @@ import com.cos.instagram.domain.user.UserRepository;
 import com.cos.instagram.util.Utils;
 import com.cos.instagram.web.dto.ImageReqDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -75,13 +66,6 @@ public class ImageService {
 				orElseThrow(null);
 
 		String imageFilename = "";
-
-//		Path imageFilepath = Paths.get(uploadFolder + imageFilename);
-//		try {
-//			Files.write(imageFilepath, imageReqDto.getFile().getBytes());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 
 		try {
 			imageFilename = azureService.uploadToCloudAndReturnFileName(imageReqDto.getFile(), "photo");
