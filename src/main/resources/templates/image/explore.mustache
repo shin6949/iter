@@ -5,7 +5,7 @@
 				<!-- 유저가 업로드한 Feed 사진 -->
 					<div class="profile__photo">
 						<a href="/user/{{user.id}}"> 
-							<img src="/upload/{{imageUrl}}">
+							<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}">
 						</a>	
 					</div>									
 					{{/images}}
