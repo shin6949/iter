@@ -19,10 +19,17 @@
     {{/images}}
 
 	{{#images}}
+<style>
+a { text-decoration: none; color: black; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:focus { text-decoration: none; }
+a:hover, a:active { text-decoration: none; }=
+</style>
 	<div class="photo u-default-box">
 		<header class="photo__header">
 			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}" onerror="this.src='/images/avatar.jpg'" />
-			<span class="photo__username">{{user.username}}</span>
+			<a class="photo__username"href="/user/{{user.id}}">{{user.username}}</a>
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
 			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}" />
