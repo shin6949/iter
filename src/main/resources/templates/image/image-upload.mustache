@@ -52,9 +52,9 @@
 							<td><input type="text" name="caption" placeholder="이미지 소개"></td>
 						</tr>
 						<tr>
-							<td><input type="text" name="location" placeholder="위치">
+							<td><input type="text" name="location" value="검색하세요." placeholder="위치" readonly>
                             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#findLocation">
-                                위치 검색
+                                검색
                             </button>
                             </td>
 						</tr>
@@ -114,14 +114,17 @@
 		}
 
         // 모달 팝업 띄울 시 발생하는 이벤트 (이벤트명 : show.bs.modal)
-        $('#findLocation').on('show.bs.modal', function (event) {
-            console.log("CALLED!")
-            // var button = $(event.relatedTarget);
-            // var what = button.data('what');
-            //
-            // // 모달 팝업에 데이터 집어넣기
-            // var modal = $(this);
-            // modal.find('.modal-body').val(what)
-        })
+        // $('#findLocation').on('show.bs.modal', function (event) {
+        //     map.relayout();
+        // })
 	</script>
 	{{>layout/footer}}
+
+    <script>
+        function setLocation(name) {
+            $('#location').val(name);
+
+            console.log(document.getElementById('location').value);
+            document.getElementById('location').value = name;
+        }
+    </script>
