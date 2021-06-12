@@ -6,7 +6,7 @@
 		<li class="explore__user">
 			<div class="explore__content">
 				<a href="/user/{{id}}">
-					<img src="/upload/{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" />
+					<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" />
 				</a>
 				<div class="explore__info">
 					<span class="explore__username">{{username}}</span> <span
@@ -15,7 +15,7 @@
 			</div>
 				{{^equalUserState}}
 					{{#followState}}
-						<button onclick="unFollow({{id}})" class="profile_edit_btn">팔로우취소</button>
+						<button onclick="unFollow({{id}})" class="profile_edit_btn">언팔로우</button>
 					{{/followState}}
 					{{^followState}}
 						<button onclick="follow({{id}})" class="profile_follow_btn">팔로우</button>
