@@ -24,7 +24,6 @@ public class AzureService {
     public String uploadToCloudAndReturnFileName(MultipartFile file, String ContainerName) throws IOException {
         UUID uuid = UUID.randomUUID();
         String imageFilename = uuid + "_" + file.getOriginalFilename();
-
         Path imageFilepath = Paths.get(uploadFolder + imageFilename);
 
         try {
@@ -39,7 +38,6 @@ public class AzureService {
                 .buildClient();
 
         BlobClient blob = container.getBlobClient(imageFilename);
-
         blob.uploadFromFile(uploadFolder + imageFilename);
 
         try {
