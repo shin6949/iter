@@ -12,6 +12,6 @@ public class LocationController {
 
     @GetMapping("/find")
     public String findLocation() {
-        return "location/findlocation";
+        return "location/find";
     }
 }
