@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>키워드로 장소검색하기</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Iter</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/image-upload.css">
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
+<body>
 <form>
-    장소 검색
-    <input type="text" id="placename" value="목포 시청">
-    <input type='button' onclick="searchLocation()" value="검색">
+    <input type="text" id="placename" placeholder="검색어를 입력하세요." value="목포 시청">
+    <input width="100px" type='button' onclick="searchLocation()" value="검색">
 </form>
 
-<div id="map" style="width:100%;height:350px;"></div>
+<div id="map" style="width:500px; height:350px;"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c750f0b1b6535c70353213552bd67884&libraries=services"></script>
 <script>
@@ -32,6 +46,7 @@
 
     // 키워드로 장소를 검색합니다
     ps.keywordSearch('목포 시청', placesSearchCB);
+    map.relayout();
 
     // 키워드 검색 완료 시 호출되는 콜백함수 입니다
     function placesSearchCB (data, status, pagination) {
@@ -42,19 +57,18 @@
             var bounds = new kakao.maps.LatLngBounds();
 
             for (var i = 0; i < data.length; i++) {
-                displayMarker(data[i]);
+                displayMarker(data[i], i);
                 bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
             }
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+            map.relayout();
             map.setBounds(bounds);
         }
     }
 
     // 지도에 마커를 표시하는 함수입니다
-    function displayMarker(place) {
-        console.log(place.y, place.x)
-
+    function displayMarker(place, id) {
         // 마커를 생성하고 지도에 표시합니다
         var marker = new kakao.maps.Marker({
             map: map,
@@ -64,7 +78,14 @@
         // 마커에 클릭이벤트를 등록합니다
         kakao.maps.event.addListener(marker, 'click', function() {
             // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-            infowindow.setContent('<div data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\" style="padding:5px; font-size:12px;">' + place.place_name + '</div>');
+            infowindow.setContent(
+                    '<div style="padding:5px; font-size:12px;">'
+                    + place.place_name +
+                    '<button id=\"location_' + id + '\" onclick=\"setLocation(\'' +place.place_name+ '\')\" ' +
+                    '\" data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\"> ' +
+                    '선택' +
+                    '</button>' +
+                    '</div>');
             infowindow.open(map, marker);
         });
     }
@@ -79,5 +100,19 @@
         ps.keywordSearch(inputValue, placesSearchCB);
     }
 </script>
+
+<script>
+    function setLocation(name) {
+        $('#findLocation').bind('show',function()
+        {
+            console.log($(".modal-body #location").value);
+        });
+
+        console.log(document.getElementById('location').value);
+        document.getElementById('location').value = name;
+        console.log($(".modal-body #location").value);
+    }
+</script>
+{{>layout/footer}}
 </body>
 </html>
