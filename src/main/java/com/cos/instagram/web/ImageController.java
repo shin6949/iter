@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.instagram.config.auth.LoginUserAnnotation;
@@ -40,7 +41,12 @@ public class ImageController {
 	}
 	
 	@GetMapping("/image/uploadForm")
-	public String imageUploadForm() {
+	public String imageUploadForm(@RequestParam(name = "location", required = false) String location, Model model) {
+		if(location == null) {
+			return "redirect:/location/find";
+		}
+
+		model.addAttribute("location", location);
 		return "image/image-upload";
 	}
 	
