@@ -38,7 +38,7 @@ public class ImageService {
 		for (Image image : images) {
 			image.setLikeCount(image.getLikes().size());
 			
-			// 좋아요 상태 여부 등록
+			// doLike 상태 여부 등록
 			for (Likes like : image.getLikes()) {
 				if(like.getUser().getId() == loginUserId) {
 					image.setLikeState(true);

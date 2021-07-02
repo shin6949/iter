@@ -25,7 +25,7 @@
 	font-weight: 600;
 }
 
-/* 수정 좋아요 카운트 증가 */ 
+/* 수정 doLike 카운트 증가 */
 .photo_caption {
 	margin-top: 6px;
 	margin-bottom: 6px;
@@ -70,7 +70,7 @@
   cursor: pointer;
 }
 
-/* 수정 좋아요 카운트 증가 */ 
+/* 수정 doLike 카운트 증가 */
 .photo__info .photo__likes {
   font-weight: 600;
   padding-bottom: 15px;

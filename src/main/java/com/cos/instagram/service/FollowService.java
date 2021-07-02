@@ -25,54 +25,49 @@ public class FollowService {
 	private final FollowRepository followRepository;
 	private final NotiRepository notiRepository;
 	
-	public List<FollowRespDto> 팔로잉리스트(int loginUserId, int pageUserId){
+	public List<FollowRespDto> getFollowingList(int loginUserId, int pageUserId){
 		// 첫번째 물음표 loginUserId, 두번째 물음표 pageUserId
-		StringBuilder sb = new StringBuilder();
-		sb.append("select u.id,u.username,u.name,u.profileImage, ");
-		sb.append("if(u.id = ?, true, false) equalUserState,");
-		sb.append("if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState ");
-		sb.append("from Follow f inner join User u on f.toUserId = u.id ");
-		sb.append("and f.fromUserId = ?");
-		String q = sb.toString();
-		System.out.println("팔로잉리스트 : "+q);
-		Query query = em.createNativeQuery(q, "FollowRespDtoMapping")
+		String queryString = "select u.id,u.username,u.name,u.profileImage, " +
+				"if(u.id = ?, true, false) equalUserState," +
+				"if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState " +
+				"from Follow f inner join User u on f.toUserId = u.id " +
+				"and f.fromUserId = ?";
+		System.out.println("getFollowingList : "+ queryString);
+		Query query = em.createNativeQuery(queryString, "FollowRespDtoMapping")
 				.setParameter(1, loginUserId)
 				.setParameter(2, loginUserId)
 				.setParameter(3, pageUserId);
-		List<FollowRespDto> followListEntity = query.getResultList();
-		return followListEntity;
+
+		return (List<FollowRespDto>) query.getResultList();
 	}
 	
-	public List<FollowRespDto> 팔로워리스트(int loginUserId, int pageUserId){
+	public List<FollowRespDto> getFollowerList(int loginUserId, int pageUserId){
 		// 첫번째 물음표 loginUserId, 두번째 물음표 pageUserId
-		StringBuilder sb = new StringBuilder();
-		sb.append("select u.id,u.username,u.name,u.profileImage, ");
-		sb.append("if(u.id = ?, true, false) equalUserState,");
-		sb.append("if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState ");
-		sb.append("from Follow f inner join User u on f.fromUserId = u.id ");
-		sb.append("and f.toUserId = ?");
-		String q = sb.toString();
+		String queryString = "select u.id,u.username,u.name,u.profileImage, " +
+				"if(u.id = ?, true, false) equalUserState," +
+				"if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState " +
+				"from Follow f inner join User u on f.fromUserId = u.id " +
+				"and f.toUserId = ?";
 		
-		Query query = em.createNativeQuery(q, "FollowRespDtoMapping")
+		Query query = em.createNativeQuery(queryString, "FollowRespDtoMapping")
 				.setParameter(1, loginUserId)
 				.setParameter(2, loginUserId)
 				.setParameter(3, pageUserId);
-		List<FollowRespDto> followerListEntity = query.getResultList();
-		return followerListEntity;
+		return (List<FollowRespDto>) query.getResultList();
 	}
 	
 	// 서비스단에서 롤백하려면 throw를 runtimeException으로 던져야됨.
 	@Transactional
-	public void 팔로우(int loginUserId, int pageUserId) {
+	public void doFollow(int loginUserId, int pageUserId) {
 		int result = followRepository.mFollow(loginUserId, pageUserId);
 		
 		notiRepository.mSave(loginUserId, pageUserId, NotiType.FOLLOW.name());
-		System.out.println("팔로우 result : "+result);
+		System.out.println("doFollow result : "+result);
 	}
 	
 	@Transactional
-	public void 팔로우취소(int loginUserId, int pageUserId) {	
+	public void doUnFollow(int loginUserId, int pageUserId) {
 		int result = followRepository.mUnFollow(loginUserId, pageUserId);
-		System.out.println("팔로우취소 result : "+result);
+		System.out.println("doUnFollow result : "+result);
 	}
 }

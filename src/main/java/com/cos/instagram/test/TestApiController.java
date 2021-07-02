@@ -103,7 +103,7 @@ public class TestApiController {
 		followRepository.save(follow);
 		// http://localhost:8080/test/api/follow/1/2
 		return fromUserEntity.getUsername()+"이 "
-		+toUserEntity.getUsername()+"을 팔로우 하였습니다.";
+		+toUserEntity.getUsername()+"을 doFollow 하였습니다.";
 	}
 	
 	@GetMapping("/test/api/image/{imageId}/like")
@@ -115,7 +115,7 @@ public class TestApiController {
 				.user(userEntity)
 				.build();
 		likeRepository.save(like);
-		return "좋아요 완료";
+		return "doLike 완료";
 	}
 }
 

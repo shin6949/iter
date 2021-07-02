@@ -16,7 +16,7 @@ public class NotiService {
 	private final NotiRepository notiRepository;
 	
 	@Transactional(readOnly = true)
-	public List<Noti> 알림리스트(int loginUserId){
+	public List<Noti> notificationList(int loginUserId){
 		return notiRepository.findByToUserId(loginUserId);
 	}
 }

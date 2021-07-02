@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
-
-	private static final Logger log = LoggerFactory.getLogger(PrincipalDetailsService.class);
 	private final UserRepository userRepository;
 	private final HttpSession session;
 

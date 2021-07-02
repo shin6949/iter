@@ -22,7 +22,7 @@ public class LikesService {
 	private final ImageRepository imageRepository;
 	
 	@Transactional
-	public void 좋아요(int imageId, int loginUserId) {
+	public void doLike(int imageId, int loginUserId) {
 		likesRepository.mSave(imageId, loginUserId);
 		Image imageEntity = imageRepository.findById(imageId).orElseThrow(new Supplier<MyImageIdNotFoundException>() {
 			@Override
@@ -34,7 +34,7 @@ public class LikesService {
 	}
 	
 	@Transactional
-	public void 싫어요(int imageId, int loginUserId) {
+	public void doUnlike(int imageId, int loginUserId) {
 		likesRepository.mDelete(imageId, loginUserId);
 	}
 }

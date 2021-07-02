@@ -20,13 +20,13 @@ public class NotiController {
 	
 	@GetMapping("/noti/{loginUserId}")
 	public String noti(@PathVariable int loginUserId, Model model) {
-		model.addAttribute("notis", notiService.알림리스트(loginUserId));
+		model.addAttribute("notis", notiService.notificationList(loginUserId));
 		return "noti/noti";
 	}
 	
 	@GetMapping("/test/noti/{loginUserId}")
 	public @ResponseBody List<Noti> testNoti(@PathVariable int loginUserId, Model model) {
 		
-		return notiService.알림리스트(loginUserId);
+		return notiService.notificationList(loginUserId);
 	}
 }

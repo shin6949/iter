@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum NotiType {
-	LIKE("좋아요"), COMMENT("댓글작성"), FOLLOW("팔로우");
+	LIKE("doLike"), COMMENT("댓글작성"), FOLLOW("doFollow");
 	
 	NotiType(String key) {
 		this.key = key;
