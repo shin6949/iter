@@ -1,0 +1,47 @@
+stages:
+  - maven
+  - azure
+  - docker
+
+test:
+  stage: maven
+  before_script:
+    - mvn clean
+  script:
+    - mvn compile
+    - mvn test
+
+build_and_run:
+  stage: docker
+  allow_failure: true
+  before_script:
+    - docker stop hello-test
+    - docker rm hello-test
+  script:
+    - docker build --tag hello:0.1 .
+    - docker run --name hello-test -d -p 8080:8080 hello:0.1
+  only:
+    - master
+
+build_and_push:
+  stage: azure
+  when: on_success
+  before_script:
+    - mvn package
+    - az login --service-principal --username $AZURE_SERVICE_ID --password $AZURE_PASSWORD --tenant $AZURE_TENANT
+    - az webapp stop -g $AZURE_RESOURCE_GROUP -n $AZURE_WEBAPP_NAME
+    - cp ./target/*.war ./app.war
+  script:
+    - git add .
+    - git commit -m "Gitlab CI/CD"
+    - git push --force azure HEAD:master
+  only:
+    - master
+
+deploy:
+  stage: azure
+  when: always
+  script:
+    - az webapp start -g $AZURE_RESOURCE_GROUP -n $AZURE_WEBAPP_NAME
+  only:
+    - master

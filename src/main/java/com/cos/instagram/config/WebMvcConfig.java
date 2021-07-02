@@ -22,8 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-public class WebMvcConfig implements WebMvcConfigurer{
-	
+public class WebMvcConfig implements WebMvcConfigurer {
 	private final HttpSession httpSession;
 	
 	@Override

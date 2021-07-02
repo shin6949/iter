@@ -23,7 +23,6 @@ import com.cos.instagram.domain.user.UserRole;
 
 @Service
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService{
-
 	private static final Logger log = LoggerFactory.getLogger(PrincipalOAuth2UserService.class);
 
 	@Autowired

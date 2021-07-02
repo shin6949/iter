@@ -9,7 +9,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer>{
 	
 	List<Image> findByUserId(int userId);
 	
-	// 내가 팔로우 하지 않은 사람들의 이미지들(최대 20개)
+	// 내가 doFollow 하지 않은 사람들의 이미지들(최대 20개)
 	@Query(value = "select * from Image where userId in (select id from User where id != ?1 and id not in (select toUserId from Follow where fromUserId = ?1))  ORDER BY createDate DESC limit 20", nativeQuery = true)
 	List<Image> mNonFollowImage(int loginUserId);
 	

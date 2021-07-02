@@ -23,7 +23,7 @@ public class CommentService {
 	private final ImageRepository imageRepository;
 	
 	@Transactional
-	public void 댓글쓰기(CommentRespDto commentRespDto) {
+	public void writeComment(CommentRespDto commentRespDto) {
 		commentRepository.mSave( 
 				commentRespDto.getUserId(), 
 				commentRespDto.getImageId(), 
@@ -38,7 +38,7 @@ public class CommentService {
 	}
 	
 	@Transactional
-	public void 댓글삭제(int id) {
+	public void deleteComment(int id) {
 		commentRepository.deleteById(id);
 	}
 }

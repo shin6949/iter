@@ -2,19 +2,15 @@ package com.cos.instagram.util;
 
 public class Script {
 	public static String alert(String msg) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<script>");
-		sb.append("alert('"+msg+"');");
-		sb.append("</script>");
-		return sb.toString();
+		return "<script>" +
+				"alert('" + msg + "');" +
+				"</script>";
 	}
 	
 	public static String back(String msg) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<script>");
-		sb.append("alert('"+msg+"');");
-		sb.append("history.back();");
-		sb.append("</script>");
-		return sb.toString();
+		return "<script>" +
+				"alert('" + msg + "');" +
+				"history.back();" +
+				"</script>";
 	}
 }
