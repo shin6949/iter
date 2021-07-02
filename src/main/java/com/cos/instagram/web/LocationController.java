@@ -18,6 +18,6 @@ public class LocationController {
     public String findLocation() {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
 
-        return "location/findlocation";
+        return "location/find";
     }
 }

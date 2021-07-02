@@ -16,6 +16,6 @@ public interface ImageRepository extends JpaRepository<Image, Integer>{
 	@Query(value="select * from Image where userId in (select toUserId from Follow where fromUserId = ?1) ORDER BY createDate DESC", nativeQuery = true)
 	List<Image> mFeeds(int loginUserId);
 	
-	@Query(value="select * from Image where id in (select imageId from Tag where name=?1) ORDER BY createDate DESC", nativeQuery = true)
+	@Query(value="select * from Image where id in (select imageId from Tag where name LIKE CONCAT('%', ?1, '%')) ORDER BY createDate DESC", nativeQuery = true)
 	List<Image> mFeeds(String tag);
 }
