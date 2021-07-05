@@ -28,8 +28,12 @@ a:hover, a:active { text-decoration: none; }
 </style>
 	<div class="photo u-default-box">
 		<header class="photo__header">
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}" onerror="this.src='/images/avatar.jpg'" />
-			<a class="photo__username"href="/user/{{user.id}}">{{user.username}}</a>
+			<a href="/user/{{user.id}}">
+                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}"
+                     onerror="this.src='/images/avatar.jpg'" />
+            </a>
+
+			<a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
 			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}" />
@@ -46,17 +50,18 @@ a:hover, a:active { text-decoration: none; }
 				</span> 
 			</div> 
 			
-			<div class="photo_tag">
-				{{#tags}}
-					#{{name}}
-				{{/tags}}
+            <div class="photo_tag">
+                {{#tags}}
+                    <a href="/image/feed?tag={{name}}">
+                        #{{name}}
+                {{/tags}}
 			</div>
 			<span class="photo__likes">{{likeCount}} likes</span>
 			<br/><br/>
 			<ul class="photo__comments">
 				{{#comments}}
 				<li class="photo__comment">
-					<span class="photo__comment-author">{{user.username}}</span> 
+                    <a href="/user/{{user.id}}" ><span class="photo__comment-author">{{user.username}}</span></a>
 					<span style="font-size:12px;">{{content}}</span>
 					{{#commentHost}}
 						<i onclick="commentDelete({{id}})" class="fa fa-trash"></i>

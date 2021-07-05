@@ -23,7 +23,8 @@ public class AuthController {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		log.info("/auth/loginForm 진입");
 
-		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser") {
+		// 이미 로그인 된 상태라면 리다이렉트
+		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
 			return "redirect:/";
 		}
 
