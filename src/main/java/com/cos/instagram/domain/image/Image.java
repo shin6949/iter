@@ -1,6 +1,7 @@
 package com.cos.instagram.domain.image;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.persistence.ColumnResult;
@@ -29,6 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @SqlResultSetMapping(
 		name = "UserProfileImageRespDtoMapping",
@@ -75,12 +77,21 @@ public class Image {
 	
 	@CreationTimestamp
 	private Timestamp createDate;
+
+	private String createDateString;
 	
 	@Transient
 	private int likeCount;
 	
 	@Transient
 	private boolean likeState;
+
+	// TODO: Time Formatting 하여 전달할 방법을 찾아야함.
+	public void setCreateDate(Timestamp timestamp) {
+		this.createDate = timestamp;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		this.createDateString = simpleDateFormat.format(timestamp);
+	}
 }
 
 

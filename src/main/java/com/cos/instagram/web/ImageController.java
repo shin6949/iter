@@ -26,8 +26,6 @@ public class ImageController {
 	private final ImageService imageService;
 	private final Logging logging;
 
-	private final String controllerName = "ImageController / ";
-	
 	@GetMapping({"", "/", "/image/feed"})
 	public String feed(String tag, @LoginUserAnnotation LoginUser loginUser, Model model) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());

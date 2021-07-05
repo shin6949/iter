@@ -8,9 +8,11 @@ import com.cos.instagram.domain.tag.Tag;
 import com.cos.instagram.domain.tag.TagRepository;
 import com.cos.instagram.domain.user.User;
 import com.cos.instagram.domain.user.UserRepository;
+import com.cos.instagram.util.Logging;
 import com.cos.instagram.util.Utils;
 import com.cos.instagram.web.dto.ImageReqDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,24 +21,27 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Log4j2
 public class ImageService {
-
 	private final ImageRepository imageRepository;
 	private final TagRepository tagRepository;
 	private final UserRepository userRepository;
 	private final AzureService azureService;
+	private final Logging logging;
 	
 	@Transactional(readOnly = true)
 	public List<Image> feedPhoto(int loginUserId, String tag){
 		List<Image> images = null;
 		if(tag == null || tag.equals("")) {
 			images = imageRepository.mFeeds(loginUserId);
-		}else {
+		} else {
 			images = imageRepository.mFeeds(tag);
 		}
-		
+
+		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		for (Image image : images) {
 			image.setLikeCount(image.getLikes().size());
+			log.info(image.getCreateDateString());
 			
 			// doLike 상태 여부 등록
 			for (Likes like : image.getLikes()) {
@@ -51,7 +56,7 @@ public class ImageService {
 				}
 			}
 		}
-		
+
 		return images;
 	}
 	
