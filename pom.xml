@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cos</groupId>
-	<artifactId>instagram</artifactId>
+	<artifactId>iter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>instagram</name>
+	<name>iter</name>
 	<description>Demo project for Spring Boot</description>
 	<packaging>war</packaging>
 
