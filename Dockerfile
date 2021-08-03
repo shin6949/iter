@@ -1,6 +1,6 @@
 FROM tomcat:8.5.69-jdk11-openjdk-buster
 
-COPY ./target/instagram-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY ./target/iter-*-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
