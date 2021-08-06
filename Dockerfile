@@ -1,8 +1,8 @@
-FROM tomcat:8.5.69-jdk11-openjdk-buster
+FROM openjdk:11
 
-COPY ./target/iter-*-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY ./target/iter-*-SNAPSHOT.jar /usr/src/myapp/iter.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["/usr/local/tomcat/bin/catalina.sh"]
-CMD ["run"]
+WORKDIR /usr/src/myapp
+CMD ["java", "-jar", "./iter.jar"]

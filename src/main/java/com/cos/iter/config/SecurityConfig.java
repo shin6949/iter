@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,6 +26,7 @@ import com.cos.iter.util.Script;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@Log4j2
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PrincipalOAuth2UserService principalOAuth2UserService;
@@ -32,22 +35,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder encode() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
+	@Value("${server.servlet.context-path}")
+	private String prefix;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		log.info("prefix: " + prefix);
 		http.csrf().disable();
 		http.authorizeRequests()
-		.antMatchers("/", "/user/**", "/follow/**", "/image/**")
-		.authenticated()
-		.antMatchers("/admin/**")
-		.access("hasRole('ROLE_ADMIN')")
-		.anyRequest()
-		.permitAll()
+		.antMatchers("/", "/user/**", "/follow/**", "/image/**").authenticated()
+		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//		.anyRequest().permitAll()
 		.and()
 		.formLogin()
 		.loginPage("/auth/loginForm")
 		.loginProcessingUrl("/auth/login")
-		.defaultSuccessUrl("/")
+		.defaultSuccessUrl(prefix + "/")
 		.failureHandler(new AuthenticationFailureHandler() {		
 			@Override 
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -61,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 		.logoutUrl("/auth/logout")
-		.logoutSuccessUrl("/auth/loginForm")
+		.logoutSuccessUrl("/")
 		.and()
 		.oauth2Login()  // oauth 요청 주소가 다 활성화
 		.userInfoEndpoint() //  oauth 로그인 성공 이후 사용자 정보를 가져오기위한 설정을 담당

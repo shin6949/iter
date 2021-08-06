@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class UserController {
 	@GetMapping("/user/{id}")
 	public String profile(@PathVariable int id, @LoginUserAnnotation LoginUser loginUser, Model model) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
+		log.info("loginUser : " + loginUser);
 
 		UserProfileRespDto userProfileRespDto = userService.memberProfile(id, loginUser);
 		model.addAttribute("respDto", userProfileRespDto);
