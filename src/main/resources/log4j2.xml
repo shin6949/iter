@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+<!--        &lt;!&ndash; log 파일을 저장하는 위치와 정책 &ndash;&gt;-->
+<!--        <RollingFile name="SaveFile">-->
+<!--            <FileName>./workspace/VIG/logs/VIG.log</FileName>-->
+<!--            <FilePattern>./workspace/VIG/logs/%d{yyyy-MM-dd}.log</FilePattern>-->
+<!--            <PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>-->
+<!--            <Policies>-->
+<!--                <TimeBasedTriggeringPolicy interval="1" modulate="true" />-->
+<!--            </Policies>-->
+<!--            <DefaultRolloverStrategy max="1000" />-->
+<!--        </RollingFile>-->
+    </Appenders>
+    <Loggers>
+
+        <!-- 기본(디폴트) loger 설정-->
+        <Root level="INFO">
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+
+
+        <Logger name="org.springframework" level="WARN" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+
+        <Logger name="com.vig" level="DEBUG" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+            <!--com.vig 패키지의 로그는 파일로 저장한다. -->
+            <AppenderRef ref="SaveFile"/>
+        </Logger>
+
+    </Loggers>
+</Configuration>
