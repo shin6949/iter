@@ -1,6 +1,6 @@
-FROM openjdk:11
+FROM openjdk:11.0.11-jre-slim-buster
 
-COPY ./target/iter-*-SNAPSHOT.jar /usr/src/myapp/iter.jar
+ADD ./target/iter-*.jar /usr/src/myapp/iter.jar
 
 EXPOSE 8080
 
