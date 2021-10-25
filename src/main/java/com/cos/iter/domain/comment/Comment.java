@@ -10,9 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import com.cos.iter.domain.post.Post;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.cos.iter.domain.image.Image;
 import com.cos.iter.domain.user.User;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "comment")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,12 +33,12 @@ public class Comment {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name="imageId")
-	private Image image;
+	@JoinColumn(name="psot_id")
+	private Post post;
 	
 	// 수정
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name="user_id")
 	private User user;
 	
 	// 수정

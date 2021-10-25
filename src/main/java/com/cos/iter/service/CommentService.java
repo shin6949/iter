@@ -2,6 +2,8 @@ package com.cos.iter.service;
 
 import java.util.function.Supplier;
 
+import com.cos.iter.domain.post.Post;
+import com.cos.iter.domain.post.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,21 +22,21 @@ import lombok.RequiredArgsConstructor;
 public class CommentService {
 	private final CommentRepository commentRepository;
 	private final NotiRepository notiRepository;
-	private final ImageRepository imageRepository;
+	private final PostRepository postRepository;
 	
 	@Transactional
 	public void writeComment(CommentRespDto commentRespDto) {
 		commentRepository.mSave( 
 				commentRespDto.getUserId(), 
-				commentRespDto.getImageId(), 
+				commentRespDto.getPostId(),
 				commentRespDto.getContent());
-		Image imageEntity = imageRepository.findById(commentRespDto.getImageId()).orElseThrow(new Supplier<MyImageIdNotFoundException>() {
+		Post postEntity = postRepository.findById(commentRespDto.getPostId()).orElseThrow(new Supplier<MyImageIdNotFoundException>() {
 			@Override
 			public MyImageIdNotFoundException get() {
 				return new MyImageIdNotFoundException();
 			}
 		});
-		notiRepository.mSave(commentRespDto.getUserId(), imageEntity.getUser().getId(), NotiType.COMMENT.name());
+		notiRepository.mSave(commentRespDto.getUserId(), postEntity.getUser().getId(), NotiType.COMMENT.name());
 	}
 	
 	@Transactional

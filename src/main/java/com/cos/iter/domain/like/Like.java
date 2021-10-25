@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.cos.iter.domain.post.Post;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.cos.iter.domain.image.Image;
@@ -20,25 +21,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "likes")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Likes {
+public class Like {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user_id")
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "imageId")
-	private Image image;
+	@JoinColumn(name = "post_id")
+	private Post post;
 	
 	@CreationTimestamp
 	private Timestamp createDate;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Post image;
+
+    public Post getImage() {
+        return image;
+    }
+
+    public void setImage(Post image) {
+        this.image = image;
+    }
 }
 
 

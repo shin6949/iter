@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "follow")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,11 +27,11 @@ public class Follow {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="fromUserId")
+	@JoinColumn(name="from_user_id")
 	private User fromUser;
 	
 	@ManyToOne
-	@JoinColumn(name="toUserId")
+	@JoinColumn(name="to_user_id")
 	private User toUser;
 	
 	@CreationTimestamp

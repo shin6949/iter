@@ -1,30 +1,23 @@
 package com.cos.iter.domain.image;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Transient;
 
+import com.cos.iter.domain.post.Post;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.cos.iter.domain.comment.Comment;
-import com.cos.iter.domain.like.Likes;
-import com.cos.iter.domain.tag.Tag;
-import com.cos.iter.domain.user.User;
 import com.cos.iter.web.dto.UserProfileImageRespDto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,13 +30,13 @@ import lombok.NoArgsConstructor;
 				targetClass = UserProfileImageRespDto.class,
 				columns = {
 						@ColumnResult(name="id", type = Integer.class),
-						@ColumnResult(name="imageUrl", type = String.class),
-						@ColumnResult(name="likeCount", type = Integer.class),
-						@ColumnResult(name="commentCount", type = Integer.class)
+						@ColumnResult(name="image_url", type = String.class),
+						@ColumnResult(name="like_count", type = Integer.class),
+						@ColumnResult(name="comment_count", type = Integer.class)
 				}
 		)
 )
-@Entity
+@Entity(name = "image")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,44 +45,23 @@ public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String location;
-	private String caption;
-	private String imageUrl;
-	
-	// Image를 select하면 한명의 User가 딸려옴.
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="userId") // 칼럼명
-	private User user; // 타입은 User오브젝트의 PK의 타입
-	
-	// Image를 select하면 여러개의 Tag가 딸려옴.
-	@OneToMany(mappedBy = "image", fetch = FetchType.LAZY) //연관관계 주인의 변수명을 적는다.
-	@JsonIgnoreProperties({"image"}) //Jackson한테 내리는 명령
-	private List<Tag> tags;
-	
-	@JsonIgnoreProperties({"image"})
-	@OneToMany(mappedBy = "image")
-	private List<Comment> comments;
-	
-	@JsonIgnoreProperties({"image"})
-	@OneToMany(mappedBy = "image")
-	private List<Likes> likes;
-	
+
+	private String url;
+
+	private float latitude;
+
+	private float longitude;
+
+	@ManyToOne()
+	@JoinColumn(name="post_id")
+	private Post post;
+
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 
-	private String createDateString;
-	
-	@Transient
-	private int likeCount;
-	
-	@Transient
-	private boolean likeState;
-
-	// TODO: Time Formatting 하여 전달할 방법을 찾아야함.
-	public void setCreateDate(Timestamp timestamp) {
-		this.createDate = timestamp;
+	public String getCreateDateStringPretty() {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		this.createDateString = simpleDateFormat.format(timestamp);
+		return simpleDateFormat.format(getCreateDate());
 	}
 }
 
