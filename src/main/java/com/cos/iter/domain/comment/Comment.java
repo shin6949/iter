@@ -33,18 +33,14 @@ public class Comment {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name="psot_id")
+	@JoinColumn(name="post_id")
 	private Post post;
 	
 	// 수정
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
-	
-	// 수정
-	@CreationTimestamp
-	private Timestamp createDate;
-	
+
 	@Transient
 	private boolean commentHost;
 }

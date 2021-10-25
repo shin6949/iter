@@ -41,17 +41,13 @@ public class Like {
 	@CreationTimestamp
 	private Timestamp createDate;
 
-    @ManyToOne
-    @JoinColumn(name = "image_id")
-    private Post image;
+	public Post getPost() {
+		return post;
+	}
 
-    public Post getImage() {
-        return image;
-    }
-
-    public void setImage(Post image) {
-        this.image = image;
-    }
+	public void setPost(Post post) {
+		this.post = post;
+	}
 }
 
 
