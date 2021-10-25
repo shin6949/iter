@@ -1,9 +1,9 @@
 package com.cos.iter.service;
 
-import com.cos.iter.domain.comment.Comment;
 import com.cos.iter.domain.image.Image;
 import com.cos.iter.domain.image.ImageRepository;
-import com.cos.iter.domain.like.Likes;
+import com.cos.iter.domain.post.Post;
+import com.cos.iter.domain.post.PostRepository;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.tag.TagRepository;
 import com.cos.iter.domain.user.User;
@@ -27,49 +27,12 @@ public class ImageService {
 	private final TagRepository tagRepository;
 	private final UserRepository userRepository;
 	private final AzureService azureService;
+	private final PostRepository postRepository;
 	private final Logging logging;
-	
-	@Transactional(readOnly = true)
-	public List<Image> feedPhoto(int loginUserId, String tag){
-		List<Image> images = null;
-		if(tag == null || tag.equals("")) {
-			images = imageRepository.mFeeds(loginUserId);
-		} else {
-			images = imageRepository.mFeeds(tag);
-		}
-
-		log.info(logging.getClassName() + " / " + logging.getMethodName());
-		for (Image image : images) {
-			image.setLikeCount(image.getLikes().size());
-			log.info(image.getCreateDateString());
-			
-			// doLike 상태 여부 등록
-			for (Likes like : image.getLikes()) {
-				if(like.getUser().getId() == loginUserId) {
-					image.setLikeState(true);
-				}
-			}
-			// 댓글 주인 여부 등록
-			for (Comment comment : image.getComments()) {
-				if(comment.getUser().getId() == loginUserId) {
-					comment.setCommentHost(true);
-				}
-			}
-		}
-
-		return images;
-	}
-	
-	@Transactional(readOnly = true)
-	public List<Image> popularPhoto(int loginUserId) {
-		return imageRepository.mNonFollowImage(loginUserId);
-	}
 
 	@Transactional
-	public void photoUpload(ImageReqDto imageReqDto, int userId) {
-		User userEntity = userRepository.findById(userId).
-				orElseThrow(null);
-
+	public void photoUploadToCloud(ImageReqDto imageReqDto, int postId) {
+		Post postEntity = postRepository.findById(postId).orElseThrow(null);
 		String imageFilename = "";
 
 		try {
@@ -79,14 +42,14 @@ public class ImageService {
 		}
 
 		// 1. Image 저장
-		Image image = imageReqDto.toEntity(imageFilename, userEntity);
-		Image imageEntity = imageRepository.save(image);
+		Image image = imageReqDto.toEntity(imageFilename, postEntity);
+		imageRepository.save(image);
 		
 		// 2. Tag 저장
 		List<String> tagNames = Utils.tagParse(imageReqDto.getTags());
 		for (String name : tagNames) {
 			Tag tag = Tag.builder()
-					.image(imageEntity)
+					.post(postEntity)
 					.name(name)
 					.build();
 			tagRepository.save(tag);

@@ -85,7 +85,7 @@ public class UserService {
 		System.out.println("서비스 회원가입 들어옴");
 		System.out.println(joinReqDto);
 		String encPassword = bCryptPasswordEncoder.encode(joinReqDto.getPassword());
-		System.out.println("encPassword : "+encPassword);
+		System.out.println("encPassword : " + encPassword);
 		joinReqDto.setPassword(encPassword);
 		userRepository.save(joinReqDto.toEntity());
 	}
@@ -109,10 +109,10 @@ public class UserService {
 				});
 		
 		// 1. 이미지들과 전체 이미지 카운트(dto받기)
-		String queryString = "select im.id, im.imageUrl, " +
-				"(select count(*) from Likes lk where lk.imageId = im.id) as likeCount, " +
-				"(select count(*) from Comment ct where ct.imageId = im.id) as commentCount " +
-				"from Image im where im.userId = ? ";
+		String queryString = "select im.id, im.image_url, " +
+				"(select count(*) from likes lk where lk.image_id = im.id) as like_count, " +
+				"(select count(*) from comment ct where ct.image_id = im.id) as comment_count " +
+				"from image im where im.user_id = ? ";
 		Query query = em.createNativeQuery(queryString, "UserProfileImageRespDtoMapping").setParameter(1, id);
 		List<UserProfileImageRespDto> imagesEntity = query.getResultList();
 

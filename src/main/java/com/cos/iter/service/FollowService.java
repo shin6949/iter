@@ -27,12 +27,12 @@ public class FollowService {
 	
 	public List<FollowRespDto> getFollowingList(int loginUserId, int pageUserId){
 		// 첫번째 물음표 loginUserId, 두번째 물음표 pageUserId
-		String queryString = "select u.id,u.username,u.name,u.profileImage, " +
-				"if(u.id = ?, true, false) equalUserState," +
-				"if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState " +
-				"from Follow f inner join User u on f.toUserId = u.id " +
-				"and f.fromUserId = ?";
-		System.out.println("getFollowingList : "+ queryString);
+		String queryString = "select u.id,u.username,u.name,u.profile_image, " +
+				"if(u.id = ?, true, false) equal_user_state," +
+				"if((select true from follow where from_user_id = ? and to_user_id = u.id), true, false) as follow_state " +
+				"from follow f inner join user u on f.to_user_id = u.id " +
+				"and f.from_user_id = ?";
+		System.out.println("getFollowingList : " + queryString);
 		Query query = em.createNativeQuery(queryString, "FollowRespDtoMapping")
 				.setParameter(1, loginUserId)
 				.setParameter(2, loginUserId)
@@ -43,11 +43,11 @@ public class FollowService {
 	
 	public List<FollowRespDto> getFollowerList(int loginUserId, int pageUserId){
 		// 첫번째 물음표 loginUserId, 두번째 물음표 pageUserId
-		String queryString = "select u.id,u.username,u.name,u.profileImage, " +
-				"if(u.id = ?, true, false) equalUserState," +
-				"if((select true from Follow where fromUserId = ? and toUserId = u.id), true, false) as followState " +
-				"from Follow f inner join User u on f.fromUserId = u.id " +
-				"and f.toUserId = ?";
+		String queryString = "select u.id,u.username,u.name,u.profile_image, " +
+				"if(u.id = ?, true, false) equal_user_state," +
+				"if((select true from follow where from_user_id = ? and to_user_id = u.id), true, false) as follow_state " +
+				"from follow f inner join user u on f.from_user_id = u.id " +
+				"and f.to_user_id = ?";
 		
 		Query query = em.createNativeQuery(queryString, "FollowRespDtoMapping")
 				.setParameter(1, loginUserId)

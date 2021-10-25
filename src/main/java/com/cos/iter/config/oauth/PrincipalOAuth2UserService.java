@@ -77,8 +77,6 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService{
 								.password(password)
 								.email(email)
 								.role(UserRole.USER)
-								.provider(provider)
-								.providerId(providerId)
 								.build();
 						return userRepository.save(user);
 					}
