@@ -30,6 +30,8 @@ public class UserController {
 
 		UserProfileRespDto userProfileRespDto = userService.memberProfile(id, loginUser);
 		model.addAttribute("respDto", userProfileRespDto);
+		log.info("UserProfileRespDto: " + userProfileRespDto);
+
 		return "user/profile";
 	}
 	
