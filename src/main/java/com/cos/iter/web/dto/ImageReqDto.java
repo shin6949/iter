@@ -4,7 +4,6 @@ import com.cos.iter.domain.post.Post;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.iter.domain.image.Image;
-import com.cos.iter.domain.user.User;
 
 import lombok.Data;
 
