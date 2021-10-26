@@ -1,6 +1,7 @@
 package com.cos.iter.domain.follow;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
@@ -31,7 +32,7 @@ public class Follow {
 	private User toUser;
 	
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 }
 
 
