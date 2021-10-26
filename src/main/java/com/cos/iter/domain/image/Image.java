@@ -1,21 +1,8 @@
 package com.cos.iter.domain.image;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import com.cos.iter.domain.post.Post;
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.cos.iter.web.dto.UserProfileImageRespDto;
 
@@ -53,16 +40,11 @@ public class Image {
 	private float longitude;
 
 	@ManyToOne()
-	@JoinColumn(name="post_id")
+	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_IMAGE_POST_ID"))
 	private Post post;
 
-	@CreationTimestamp
-	private LocalDateTime createDate;
-
-	public String getCreateDateStringPretty() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		return simpleDateFormat.format(getCreateDate());
-	}
+	@Column(columnDefinition = "smallint default 0")
+	private short sequence;
 }
 
 

@@ -1,7 +1,7 @@
 {{>layout/header}}
 <main id="feed">
 
-    {{^images}}
+    {{^posts}}
         <img src="/images/3.PNG" align="center"/>
     <font size="5px">
     <pre>
@@ -16,9 +16,9 @@
 
     </pre>
      </font>
-    {{/images}}
+    {{/posts}}
 
-	{{#images}}
+	{{#posts}}
 <style>
 a { text-decoration: none; color: black; }
 a:visited { text-decoration: none; }
@@ -36,7 +36,9 @@ a:hover, a:active { text-decoration: none; }
 			<a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}" />
+            {{#images}}
+                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
+            {{/images}}
 		</div>
 		<div class="photo__info">
 			<div class="photo__actions">
@@ -82,7 +84,7 @@ a:hover, a:active { text-decoration: none; }
 			</div>
 		</div>
 	</div>
-	{{/images}}
+	{{/posts}}
 	
 </main>
 <script>

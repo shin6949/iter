@@ -28,7 +28,7 @@ public class PostController {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser : " + loginUser);
 
-        model.addAttribute("images", postService.getFeedPhoto(loginUser.getId(), tag, page));
+        model.addAttribute("posts", postService.getFeedPhoto(loginUser.getId(), tag, page));
         return "image/feed";
     }
 

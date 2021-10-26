@@ -2,12 +2,8 @@ package com.cos.iter.domain.follow;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+
 import org.hibernate.annotations.CreationTimestamp;
 import com.cos.iter.domain.user.User;
 
@@ -27,11 +23,11 @@ public class Follow {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="from_user_id")
+	@JoinColumn(name="from_user_id", foreignKey = @ForeignKey(name="FK_FOLLOW_FROM_USER_ID"))
 	private User fromUser;
 	
 	@ManyToOne
-	@JoinColumn(name="to_user_id")
+	@JoinColumn(name="to_user_id", foreignKey = @ForeignKey(name="FK_FOLLOW_TO_USER_ID"))
 	private User toUser;
 	
 	@CreationTimestamp
