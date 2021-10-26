@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
     private final Logging logging;
 
-    @GetMapping({"", "/"})
+    @GetMapping({"", "/", "/post"})
     public String feed(String tag, @LoginUserAnnotation LoginUser loginUser,
                        @RequestParam(name = "page", defaultValue = "1") int page, Model model) {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
