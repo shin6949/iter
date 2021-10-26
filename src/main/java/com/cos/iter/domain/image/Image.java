@@ -4,13 +4,13 @@ import javax.persistence.*;
 
 import com.cos.iter.domain.post.Post;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity(name = "image")
 @Data
+//@Getter
+//@Setter
+//@EqualsAndHashCode(callSuper = false, exclude = {"post"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
