@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import com.cos.iter.domain.post.Post;
 import com.cos.iter.domain.post.PostRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
+@Log4j2
 public class CommentService {
 	private final CommentRepository commentRepository;
 	private final NotiRepository notiRepository;
@@ -26,7 +28,7 @@ public class CommentService {
 	
 	@Transactional
 	public void writeComment(CommentRespDto commentRespDto) {
-		commentRepository.mSave( 
+		commentRepository.mSave(
 				commentRespDto.getUserId(), 
 				commentRespDto.getPostId(),
 				commentRespDto.getContent());

@@ -58,6 +58,7 @@ public class PostController {
     public String imageExplore(@LoginUserAnnotation LoginUser loginUser,
                                @RequestParam(name = "page", defaultValue = "1") int page, Model model) {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
+        log.info("loginUser: " + loginUser);
 
         model.addAttribute("posts", postService.getPopularPost(loginUser.getId(), page));
         return "image/explore";
