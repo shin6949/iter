@@ -6,13 +6,12 @@
 				<input type="file" name="profileImage" style="display: none;" />
 				<input type="hidden" name="userId" value="{{respDto.user.id}}" />
 			</form>
-<!--			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"-->
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{respDto.user.profileImage}}" id="profile_image"
+			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"
 				style="cursor: pointer" onerror="this.src='/images/avatar.jpg'" />
 		</div>
 		
 		<div class="profile__info">
-			<div class="profile__title">s
+			<div class="profile__title">
 				<h1>{{respDto.user.username}}</h1>
 				{{^respDto.pageHost}}
 				    {{#respDto.followState}}
@@ -38,7 +37,7 @@
 				
 			</div>
 			<ul class="profile__stats">
-				<li class="profile__stat"><span class="profile__stat-number">{{respDto.imageCount}}</span>
+				<li class="profile__stat"><span class="profile__stat-number">{{respDto.postCount}}</span>
 					posts</li>
 				<li class="profile__stat"><span class="profile__stat-number">{{respDto.followerCount}}</span>
 					<a href="/follow/followerList/{{respDto.user.id}}">followers</a></li>
@@ -66,7 +65,7 @@
 		<div class="profile__photo-grid">
 				
 				<!-- 유저가 업로드한 Feed 사진 -->
-				{{#respDto.images}}
+				{{#respDto.posts}}
 					<div class="profile__photo">
 						<a href="#"> 
 							<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}">
@@ -80,7 +79,7 @@
 							</span>
 						</div>
 					</div>									
-				{{/respDto.images}}
+				{{/respDto.posts}}
 				
 		</div>	
 </main>

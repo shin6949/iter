@@ -17,8 +17,8 @@ public class UserProfileRespDto {
 	private boolean pageHost; // 페이지의 주인 확인
 	private boolean followState; // true(doFollow 취소), false(doFollow)
 	private User user;
-	private List<UserProfileImageRespDto> images;
+	private List<UserProfilePostRespDto> posts;
 	private int followerCount;
 	private int followingCount;
-	private int imageCount;
+	private int postCount;
 }

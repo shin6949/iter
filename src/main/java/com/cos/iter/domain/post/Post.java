@@ -5,6 +5,7 @@ import com.cos.iter.domain.image.Image;
 import com.cos.iter.domain.like.Like;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.user.User;
+import com.cos.iter.web.dto.UserProfilePostRespDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@SqlResultSetMapping(
+        name = "UserProfilePostRespDtoMapping",
+        classes = @ConstructorResult(
+                targetClass = UserProfilePostRespDto.class,
+                columns = {
+                        @ColumnResult(name="id", type = Integer.class),
+                        @ColumnResult(name="image_url", type=String.class),
+                        @ColumnResult(name="like_count", type = Integer.class),
+                        @ColumnResult(name="comment_count", type = Integer.class)
+                }
+        )
+)
 @Entity(name = "post")
 @Getter
 @Setter
@@ -61,10 +74,17 @@ public class Post {
     private boolean likeState;
 
     @Transient
+    private Image firstImage;
+
+    @Transient
     private String createDateString;
 
     public String getCreateDateString() {
         this.createDateString = getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
         return createDateString;
+    }
+
+    public Image getFirstImage() {
+        return getImages().get(0);
     }
 }
