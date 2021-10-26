@@ -6,10 +6,7 @@ import com.cos.iter.domain.post.Post;
 import com.cos.iter.domain.post.PostRepository;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.tag.TagRepository;
-import com.cos.iter.domain.user.User;
-import com.cos.iter.domain.user.UserRepository;
-import com.cos.iter.util.Logging;
-import com.cos.iter.util.Utils;
+import com.cos.iter.util.TagParser;
 import com.cos.iter.web.dto.ImageReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,10 +22,9 @@ import java.util.List;
 public class ImageService {
 	private final ImageRepository imageRepository;
 	private final TagRepository tagRepository;
-	private final UserRepository userRepository;
 	private final AzureService azureService;
 	private final PostRepository postRepository;
-	private final Logging logging;
+	private final TagParser tagParser;
 
 	@Transactional
 	public void photoUploadToCloud(ImageReqDto imageReqDto, int postId) {
@@ -46,7 +42,7 @@ public class ImageService {
 		imageRepository.save(image);
 		
 		// 2. Tag 저장
-		List<String> tagNames = Utils.tagParse(imageReqDto.getTags());
+		List<String> tagNames = tagParser.tagParse(imageReqDto.getTags());
 		for (String name : tagNames) {
 			Tag tag = Tag.builder()
 					.post(postEntity)

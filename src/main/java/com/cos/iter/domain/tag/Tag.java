@@ -5,15 +5,13 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 
 import com.cos.iter.domain.post.Post;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Entity(name = "tag")
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"post"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
