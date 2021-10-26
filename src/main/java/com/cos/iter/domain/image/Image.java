@@ -7,10 +7,9 @@ import com.cos.iter.domain.post.Post;
 import lombok.*;
 
 @Entity(name = "image")
-@Data
-//@Getter
-//@Setter
-//@EqualsAndHashCode(callSuper = false, exclude = {"post"})
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"post"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
