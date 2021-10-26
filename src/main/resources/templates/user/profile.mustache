@@ -6,12 +6,13 @@
 				<input type="file" name="profileImage" style="display: none;" />
 				<input type="hidden" name="userId" value="{{respDto.user.id}}" />
 			</form>
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"
+<!--			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"-->
+			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{respDto.user.profileImage}}" id="profile_image"
 				style="cursor: pointer" onerror="this.src='/images/avatar.jpg'" />
 		</div>
 		
 		<div class="profile__info">
-			<div class="profile__title">
+			<div class="profile__title">s
 				<h1>{{respDto.user.username}}</h1>
 				{{^respDto.pageHost}}
 				    {{#respDto.followState}}
