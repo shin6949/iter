@@ -6,18 +6,18 @@ import com.cos.iter.domain.like.Like;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity(name = "post")
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"tags", "images", "comments", "likes"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -59,4 +59,12 @@ public class Post {
 
     @Transient
     private boolean likeState;
+
+    @Transient
+    private String createDateString;
+
+    public String getCreateDateString() {
+        this.createDateString = getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        return createDateString;
+    }
 }

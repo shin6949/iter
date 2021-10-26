@@ -35,7 +35,6 @@ public class PostService {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         for (Post post : posts) {
             post.setLikeCount(post.getLikes().size());
-            log.info(post.getCreateDate().toString());
 
             // doLike 상태 여부 등록
             for (Like like : post.getLikes()) {
@@ -60,7 +59,10 @@ public class PostService {
             page = 1;
         }
 
-        return postRepository.getNonFollowPosts(loginUserId, getStartLimitNum(page), getEmdLimitNum(page));
+        List<Post> nonFollowPosts = postRepository.getNonFollowPosts(loginUserId, getStartLimitNum(page), getEmdLimitNum(page));
+        log.info("nonFollowPosts: " + nonFollowPosts);
+
+        return nonFollowPosts;
     }
 
     private int getStartLimitNum(Integer page) {
