@@ -1,6 +1,7 @@
 package com.cos.iter.domain.post;
 
 import com.cos.iter.domain.comment.Comment;
+import com.cos.iter.domain.image.Image;
 import com.cos.iter.domain.like.Like;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.user.User;
@@ -31,15 +32,19 @@ public class Post {
     private LocalDateTime createDate;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", foreignKey = @ForeignKey(name="FK_POST_USER_ID"))
     private User user;
 
     private String mapImageUrl;
 
     // Image를 select하면 여러개의 Tag가 딸려옴.
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY) //연관관계 주인의 변수명을 적는다.
-    @JsonIgnoreProperties({"post"}) //Jackson한테 내리는 명령
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY) // 연관관계 주인의 변수명을 적는다.
+    @JsonIgnoreProperties({"post"}) // Jackson한테 내리는 명령
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnoreProperties({"post"}) // Jackson한테 내리는 명령
+    private List<Image> images;
 
     @JsonIgnoreProperties({"post"})
     @OneToMany(mappedBy = "post")

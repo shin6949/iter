@@ -37,7 +37,7 @@ public class LikesService {
 	}
 	
 	@Transactional
-	public void doUnlike(int imageId, int loginUserId) {
-		likeRepository.mDelete(imageId, loginUserId);
+	public void doUnlike(int postId, int loginUserId) {
+		likeRepository.mDelete(postId, loginUserId);
 	}
 }
