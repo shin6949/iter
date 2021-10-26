@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface NotiRepository extends JpaRepository<Noti, Integer> {
 	@Modifying
-	@Query(value = "INSERT INTO noti(from_user_id, to_user_id, noti_type, create_date) VALUES(?1, ?2, ?3, now())", nativeQuery = true)
+	@Query(value = "INSERT INTO notification(from_user_id, to_user_id, noti_type, create_date) VALUES(?1, ?2, ?3, now())", nativeQuery = true)
 	int mSave(int fromUserId, int toUserId, String notiType);
 	
 	List<Noti> findByToUserId(int loginUserId);
