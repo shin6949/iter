@@ -15,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(value="select * from post where user_id in (select to_user_id from follow where from_user_id = ?1) ORDER BY create_date DESC LIMIT ?2, ?3", nativeQuery = true)
     List<Post> getFeeds(int loginUserId, int from, int to);
 
-    @Query(value="select * from post where user_id in (select image_id from tag where name LIKE CONCAT('%', ?1, '%')) ORDER BY create_date DESC LIMIT ?2, ?3", nativeQuery = true)
+    @Query(value="select * from post where id in (select post_id from tag where name LIKE CONCAT('%', ?1, '%')) ORDER BY create_date DESC LIMIT ?2, ?3", nativeQuery = true)
     List<Post> getFeeds(String tag, int from, int to);
 }
