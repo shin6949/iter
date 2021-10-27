@@ -36,6 +36,7 @@ public class ImageController {
 	@PostMapping("/image/upload")
 	public String imageUpload(@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
+		log.info("ImageReqDto: " + imageReqDto);
 
 		imageService.photoUploadToCloud(imageReqDto, loginUser.getId());
 		return "redirect:/user/" + loginUser.getId();

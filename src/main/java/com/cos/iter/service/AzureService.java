@@ -15,16 +15,16 @@ import java.util.UUID;
 
 @Service
 public class AzureService {
-    @Value("${azure.connect-string}")
+    @Value("${azure.connect.string}")
     private String connectString;
 
     @Value("${file.path}")
     private String uploadFolder;
 
     public String uploadToCloudAndReturnFileName(MultipartFile file, String ContainerName) throws IOException {
-        UUID uuid = UUID.randomUUID();
-        String imageFilename = uuid + "_" + file.getOriginalFilename();
-        Path imageFilepath = Paths.get(uploadFolder + imageFilename);
+        final UUID uuid = UUID.randomUUID();
+        final String imageFilename = uuid + "_" + file.getOriginalFilename();
+        final Path imageFilepath = Paths.get(uploadFolder + imageFilename);
 
         try {
             Files.write(imageFilepath, file.getBytes());
@@ -32,12 +32,12 @@ public class AzureService {
             e.printStackTrace();
         }
 
-        BlobContainerClient container = new BlobContainerClientBuilder()
+        final BlobContainerClient container = new BlobContainerClientBuilder()
                 .connectionString(connectString)
                 .containerName(ContainerName)
                 .buildClient();
 
-        BlobClient blob = container.getBlobClient(imageFilename);
+        final BlobClient blob = container.getBlobClient(imageFilename);
         blob.uploadFromFile(uploadFolder + imageFilename);
 
         try {
