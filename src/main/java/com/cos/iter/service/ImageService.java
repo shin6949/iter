@@ -38,7 +38,7 @@ public class ImageService {
 		}
 
 		// 1. Image 저장
-		Image image = imageReqDto.toEntity(imageFilename, postEntity);
+		Image image = imageReqDto.toImageEntity(imageFilename, postEntity);
 		imageRepository.save(image);
 		
 		// 2. Tag 저장

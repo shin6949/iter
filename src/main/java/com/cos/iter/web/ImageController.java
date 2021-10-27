@@ -1,5 +1,6 @@
 package com.cos.iter.web;
 
+import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Log4j2
 public class ImageController {
 	private final ImageService imageService;
+	private final PostService postService;
 	private final Logging logging;
 
 	@GetMapping("/image/uploadForm")
@@ -38,7 +40,10 @@ public class ImageController {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		log.info("ImageReqDto: " + imageReqDto);
 
-		imageService.photoUploadToCloud(imageReqDto, loginUser.getId());
+		int postId = postService.saveAndReturnId(imageReqDto, loginUser.getId());
+		log.info("Inserted Post Id: " + postId);
+
+		imageService.photoUploadToCloud(imageReqDto, postId);
 		return "redirect:/user/" + loginUser.getId();
 	}
 }

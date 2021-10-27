@@ -10,16 +10,23 @@ import lombok.Data;
 @Data
 public class ImageReqDto {
 	private MultipartFile file;
+	private String content;
 	private float latitude;
 	private float longitude;
 	private String tags;
 	
-	public Image toEntity(String imageUrl, Post postEntity) {
+	public Image toImageEntity(String imageUrl, Post postEntity) {
 		return Image.builder()
 				.latitude(latitude)
 				.longitude(longitude)
 				.url(imageUrl)
 				.post(postEntity)
+				.build();
+	}
+
+	public Post toPostEntity() {
+		return Post.builder()
+				.content(content)
 				.build();
 	}
 }
