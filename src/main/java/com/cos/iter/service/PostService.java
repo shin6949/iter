@@ -4,7 +4,9 @@ import com.cos.iter.domain.comment.Comment;
 import com.cos.iter.domain.like.Like;
 import com.cos.iter.domain.post.Post;
 import com.cos.iter.domain.post.PostRepository;
+import com.cos.iter.domain.user.UserRepository;
 import com.cos.iter.util.Logging;
+import com.cos.iter.web.dto.ImageReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final Logging logging;
 
     @Transactional(readOnly = true)
@@ -63,6 +66,17 @@ public class PostService {
         log.info("nonFollowPosts: " + nonFollowPosts);
 
         return nonFollowPosts;
+    }
+
+    @Transactional
+    public int saveAndReturnId(ImageReqDto imageReqDto, int userId) {
+        Post post = imageReqDto.toPostEntity();
+
+        post.setUser(userRepository.getById(userId));
+        postRepository.save(post);
+        postRepository.flush();
+
+        return post.getId();
     }
 
     private int getStartLimitNum(Integer page) {
