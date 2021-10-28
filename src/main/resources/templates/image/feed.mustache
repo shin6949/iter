@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <main id="feed">
 
-    {{^posts}}
+    {{^posts.content}}
         <img src="/images/3.PNG" align="center"/>
     <font size="5px">
     <pre>
@@ -17,9 +17,9 @@
 
     </pre>
      </font>
-    {{/posts}}
+    {{/posts.content}}
 
-	{{#posts}}
+	{{#posts.content}}
 <style>
 a { text-decoration: none; color: black; }
 a:visited { text-decoration: none; }
@@ -90,7 +90,7 @@ a:hover, a:active { text-decoration: none; }
 			</div>
 		</div>
 	</div>
-	{{/posts}}
+	{{/posts.content}}
 	
 </main>
 <script>
