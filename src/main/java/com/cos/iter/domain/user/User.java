@@ -1,14 +1,13 @@
 package com.cos.iter.domain.user;
 
 import com.cos.iter.web.dto.FollowRespDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SqlResultSetMapping(
 		name = "FollowRespDtoMapping",
@@ -18,42 +17,41 @@ import java.sql.Timestamp;
 						@ColumnResult(name="id", type = Integer.class),
 						@ColumnResult(name="username", type = String.class),
 						@ColumnResult(name="name", type = String.class),
-						@ColumnResult(name="profileImage", type = String.class),
-						@ColumnResult(name="followState", type = Boolean.class),
-						@ColumnResult(name="equalUserState", type = Boolean.class),
+						@ColumnResult(name="profile_image", type = String.class),
+						@ColumnResult(name="follow_state", type = Boolean.class),
+						@ColumnResult(name="equal_user_state", type = Boolean.class),
 				}
 		)
 )
-@Entity
+@Entity(name = "user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Log4j2
 public class User {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(unique = true)
 	private String username;
 	private String password;
-	private String email; // 모델만들때 실수로 안넣음.
+	private String email;
 	private String name;
 	private String website;
-	private String bio; // 자기 소개
+	private String bio;
 	private String phone;
-	private String gender;
 	private String profileImage;
+	@Transient
+	private String url;
+	private Boolean gender;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
-	private String provider;
-	private String providerId;
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+		this.url = profileImage;
+	}
 }
-
-
-
-
-

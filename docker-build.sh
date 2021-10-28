@@ -2,4 +2,4 @@
 rm -rf ./target
 mvn clean
 mvn package
-docker build --tag iter:1.0 .
+docker build --tag registry.architectgroup.com/iter:1.0 .

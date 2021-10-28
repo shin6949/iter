@@ -3,6 +3,7 @@ package com.cos.iter.service;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
+@Log4j2
 public class AzureService {
     @Value("${azure.connect-string}")
     private String connectString;
@@ -22,9 +24,9 @@ public class AzureService {
     private String uploadFolder;
 
     public String uploadToCloudAndReturnFileName(MultipartFile file, String ContainerName) throws IOException {
-        UUID uuid = UUID.randomUUID();
-        String imageFilename = uuid + "_" + file.getOriginalFilename();
-        Path imageFilepath = Paths.get(uploadFolder + imageFilename);
+        final UUID uuid = UUID.randomUUID();
+        final String imageFilename = uuid + "_" + file.getOriginalFilename();
+        final Path imageFilepath = Paths.get(uploadFolder + imageFilename);
 
         try {
             Files.write(imageFilepath, file.getBytes());
@@ -32,12 +34,12 @@ public class AzureService {
             e.printStackTrace();
         }
 
-        BlobContainerClient container = new BlobContainerClientBuilder()
+        final BlobContainerClient container = new BlobContainerClientBuilder()
                 .connectionString(connectString)
                 .containerName(ContainerName)
                 .buildClient();
 
-        BlobClient blob = container.getBlobClient(imageFilename);
+        final BlobClient blob = container.getBlobClient(imageFilename);
         blob.uploadFromFile(uploadFolder + imageFilename);
 
         try {

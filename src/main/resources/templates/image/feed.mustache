@@ -1,7 +1,8 @@
 {{>layout/header}}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <main id="feed">
 
-    {{^images}}
+    {{^posts.content}}
         <img src="/images/3.PNG" align="center"/>
     <font size="5px">
     <pre>
@@ -16,9 +17,9 @@
 
     </pre>
      </font>
-    {{/images}}
+    {{/posts.content}}
 
-	{{#images}}
+	{{#posts.content}}
 <style>
 a { text-decoration: none; color: black; }
 a:visited { text-decoration: none; }
@@ -28,16 +29,23 @@ a:hover, a:active { text-decoration: none; }
 </style>
 	<div class="photo u-default-box">
 		<header class="photo__header">
-			<a href="/user/{{user.id}}">
-                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}"
+            <a href="/user/{{user.id}}">
+                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
                      onerror="this.src='/images/avatar.jpg'" />
             </a>
 
 			<a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}" />
+            {{#images}}
+                <img class="mySlides img-{{post.id}}" src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
+            {{/images}}
 		</div>
+        <div class="w3-center">
+            <button id="btn-prev-{{id}}" class="w3-btn" onclick="plusDivs(-1, 'img-{{id}}')">&#10094; Prev</button>
+            <button id="btn-next-{{id}}" class="w3-btn" onclick="plusDivs(1, 'img-{{id}}')">Next &#10095;</button>
+        </div>
+
 		<div class="photo__info">
 			<div class="photo__actions">
 				<span class="photo__action">
@@ -52,12 +60,13 @@ a:hover, a:active { text-decoration: none; }
 			
             <div class="photo_tag">
                 {{#tags}}
-                    <a href="/image/feed?tag={{name}}">
-                        #{{name}}
+                    <a href="/post?tag={{name}}"/>#{{name}}
                 {{/tags}}
 			</div>
 			<span class="photo__likes">{{likeCount}} likes</span>
-			<br/><br/>
+			<br/>
+            <span style="font-size:14px;">{{content}}</span>
+            <br/>
 			<ul class="photo__comments">
 				{{#comments}}
 				<li class="photo__comment">
@@ -69,20 +78,19 @@ a:hover, a:active { text-decoration: none; }
 				</li>
 				{{/comments}}
 			</ul>
-			<span class="photo__date">{{createDate}}</span>
-	
+			<span class="photo__date">{{createDateString}}</span>
+
 			<div class="photo__add-comment-container">
-				
 				<form id="frm-{{id}}" style="width:100%;">
 					<input type="hidden" name="userId" value="{{loginUser.id}}" />
-					<input type="hidden" name="imageId" value="{{id}}" />
+					<input type="hidden" name="postId" value="{{id}}" />
 					<textarea id="content-{{id}}" name="content"  placeholder="Add a comment..."></textarea>
 				</form>	
 				<i onclick="commentSend({{id}})" class="fa fa-angle-right"></i>
 			</div>
 		</div>
 	</div>
-	{{/images}}
+	{{/posts.content}}
 	
 </main>
 <script>
@@ -94,6 +102,32 @@ a:hover, a:active { text-decoration: none; }
 <script type="text/javascript">
         {{>js/comment}}
         {{>js/like}}
+</script>
+
+<script>
+    var slideIndex = 1;
+{{#posts}}
+    showDivs(slideIndex, 'img-{{id}}');
+    if(document.getElementsByClassName('mySlides img-{{id}}').length === 1) {
+        document.getElementById("btn-prev-{{id}}").style.display="none";
+        document.getElementById("btn-next-{{id}}").style.display="none";
+    }
+{{/posts}}
+
+    function plusDivs(n, class_id) {
+        showDivs(slideIndex += n, class_id);
+    }
+
+    function showDivs(n, class_id) {
+        var i;
+        var x = document.getElementsByClassName(class_id);
+        if (n > x.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = x.length}
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        x[slideIndex-1].style.display = "block";
+    }
 </script>
 
 {{>layout/footer}}

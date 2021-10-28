@@ -1,18 +1,8 @@
 package com.cos.iter.domain.comment;
 
-import java.sql.Timestamp;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.cos.iter.domain.image.Image;
+import com.cos.iter.domain.post.Post;
 import com.cos.iter.domain.user.User;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Entity(name = "comment")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,18 +23,14 @@ public class Comment {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name="imageId")
-	private Image image;
+	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_COMMENT_POST_ID"))
+	private Post post;
 	
 	// 수정
 	@ManyToOne
-	@JoinColumn(name="userId")
+	@JoinColumn(name="user_id", foreignKey = @ForeignKey(name="FK_COMMENT_USER_ID"))
 	private User user;
-	
-	// 수정
-	@CreationTimestamp
-	private Timestamp createDate;
-	
+
 	@Transient
 	private boolean commentHost;
 }

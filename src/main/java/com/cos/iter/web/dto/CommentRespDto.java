@@ -6,5 +6,5 @@ import lombok.Data;
 public class CommentRespDto {
 	private String content;
 	private int userId;
-	private int imageId;
+	private int postId;
 }

@@ -37,7 +37,7 @@
 				
 			</div>
 			<ul class="profile__stats">
-				<li class="profile__stat"><span class="profile__stat-number">{{respDto.imageCount}}</span>
+				<li class="profile__stat"><span class="profile__stat-number">{{respDto.postCount}}</span>
 					posts</li>
 				<li class="profile__stat"><span class="profile__stat-number">{{respDto.followerCount}}</span>
 					<a href="/follow/followerList/{{respDto.user.id}}">followers</a></li>
@@ -65,7 +65,7 @@
 		<div class="profile__photo-grid">
 				
 				<!-- 유저가 업로드한 Feed 사진 -->
-				{{#respDto.images}}
+				{{#respDto.posts}}
 					<div class="profile__photo">
 						<a href="#"> 
 							<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}">
@@ -79,7 +79,7 @@
 							</span>
 						</div>
 					</div>									
-				{{/respDto.images}}
+				{{/respDto.posts}}
 				
 		</div>	
 </main>
