@@ -79,6 +79,7 @@ public class Post {
     private boolean likeState;
 
     @Transient
+    @ToString.Exclude
     private Image firstImage;
 
     public String getUserProfileImage() {
