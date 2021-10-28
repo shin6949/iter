@@ -81,7 +81,8 @@
             infowindow.setContent(
                     '<div style="padding:5px; font-size:12px;">'
                     + place.place_name +
-                    '<button onclick=\"location.href=\'/image/uploadForm?location=' + place.place_name + '\'' +
+                    '<button onclick=\"location.href=\'/image/uploadForm?location=' + place.place_name + '&lot=' + place.x
+                    + '&lat=' + place.y + '\'' +
                     '\" data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\"> ' +
                     '선택' +
                     '</button>' +

@@ -23,8 +23,12 @@ public class ImageController {
 	private final Logging logging;
 
 	@GetMapping("/image/uploadForm")
-	public String imageUploadForm(@RequestParam(name = "location", required = false) String location, Model model) {
+	public String imageUploadForm(@RequestParam(name = "location", required = false) String location,
+								  @RequestParam(name = "lot", required = false) float lot,
+								  @RequestParam(name = "lat", required = false) float lat,
+								  Model model) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
+		log.info("lot: " + lot + " / lat: " + lat);
 
 		if(location == null) {
 			log.info("Redirecting to location find page");
@@ -32,6 +36,8 @@ public class ImageController {
 		}
 
 		model.addAttribute("location", location);
+		model.addAttribute("longitude", lot);
+		model.addAttribute("latitude", lat);
 		return "image/image-upload";
 	}
 	
