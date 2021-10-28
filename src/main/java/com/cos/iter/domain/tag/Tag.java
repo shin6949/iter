@@ -1,25 +1,17 @@
 package com.cos.iter.domain.tag;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+import com.cos.iter.domain.post.Post;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.cos.iter.domain.image.Image;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Data
+@Entity(name = "tag")
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false, exclude = {"post"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,12 +19,13 @@ public class Tag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	private String name;
 	
 	@ManyToOne
-	@JoinColumn(name="imageId")
-	private Image image;
+	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_TAG_POST_ID"))
+	private Post post;
 	
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 }

@@ -27,7 +27,7 @@
 
 <div id="map" style="width:500px; height:350px;"></div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c750f0b1b6535c70353213552bd67884&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b29e5f1a06b5ed964627df8f7e9c4b9&libraries=services"></script>
 <script>
     // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
     var infowindow = new kakao.maps.InfoWindow({zIndex:1});
@@ -81,7 +81,8 @@
             infowindow.setContent(
                     '<div style="padding:5px; font-size:12px;">'
                     + place.place_name +
-                    '<button onclick=\"location.href=\'/image/uploadForm?location=' + place.place_name + '\'' +
+                    '<button onclick=\"location.href=\'/image/uploadForm?location=' + place.place_name + '&lot=' + place.x
+                    + '&lat=' + place.y + '\'' +
                     '\" data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\"> ' +
                     '선택' +
                     '</button>' +

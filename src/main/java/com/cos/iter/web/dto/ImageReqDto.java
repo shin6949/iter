@@ -1,25 +1,32 @@
 package com.cos.iter.web.dto;
 
+import com.cos.iter.domain.post.Post;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cos.iter.domain.image.Image;
-import com.cos.iter.domain.user.User;
 
 import lombok.Data;
 
 @Data
 public class ImageReqDto {
 	private MultipartFile file;
-	private String caption;
-	private String location;
+	private String content;
+	private float latitude;
+	private float longitude;
 	private String tags;
 	
-	public Image toEntity(String imageUrl, User userEntity) {
+	public Image toImageEntity(String imageUrl, Post postEntity) {
 		return Image.builder()
-				.location(location)
-				.caption(caption)
-				.imageUrl(imageUrl)
-				.user(userEntity)
+				.latitude(latitude)
+				.longitude(longitude)
+				.url(imageUrl)
+				.post(postEntity)
+				.build();
+	}
+
+	public Post toPostEntity() {
+		return Post.builder()
+				.content(content)
 				.build();
 	}
 }

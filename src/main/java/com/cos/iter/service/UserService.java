@@ -6,9 +6,10 @@ import com.cos.iter.domain.follow.FollowRepository;
 import com.cos.iter.domain.user.User;
 import com.cos.iter.domain.user.UserRepository;
 import com.cos.iter.web.dto.JoinReqDto;
-import com.cos.iter.web.dto.UserProfileImageRespDto;
+import com.cos.iter.web.dto.UserProfilePostRespDto;
 import com.cos.iter.web.dto.UserProfileRespDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 @Service
+@Log4j2
 public class UserService {
 	
 	@PersistenceContext
@@ -82,11 +84,13 @@ public class UserService {
 	
 	@Transactional
 	public void register(JoinReqDto joinReqDto) {
-		System.out.println("서비스 회원가입 들어옴");
-		System.out.println(joinReqDto);
+		log.info("서비스 회원가입 들어옴");
+		log.info("joinReqDto: " + joinReqDto);
+
 		String encPassword = bCryptPasswordEncoder.encode(joinReqDto.getPassword());
-		System.out.println("encPassword : "+encPassword);
+		log.info("encPassword : " + encPassword);
 		joinReqDto.setPassword(encPassword);
+
 		userRepository.save(joinReqDto.toEntity());
 	}
 	
@@ -95,13 +99,11 @@ public class UserService {
 	// (2) isolation(고립성)을 위해 Phantom read 문제가 일어나지 않음.
 	@Transactional(readOnly = true)
 	public UserProfileRespDto memberProfile(int id, LoginUser loginUser) {
-		int imageCount;
 		int followerCount;
 		int followingCount;
 		boolean followState;
 		
-		User userEntity = userRepository.findById(id)
-				.orElseThrow(new Supplier<MyUserIdNotFoundException>() {
+		User userEntity = userRepository.findById(id).orElseThrow(new Supplier<MyUserIdNotFoundException>() {
 					@Override
 					public MyUserIdNotFoundException get() {
 						return new MyUserIdNotFoundException();
@@ -109,14 +111,16 @@ public class UserService {
 				});
 		
 		// 1. 이미지들과 전체 이미지 카운트(dto받기)
-		String queryString = "select im.id, im.imageUrl, " +
-				"(select count(*) from Likes lk where lk.imageId = im.id) as likeCount, " +
-				"(select count(*) from Comment ct where ct.imageId = im.id) as commentCount " +
-				"from Image im where im.userId = ? ";
-		Query query = em.createNativeQuery(queryString, "UserProfileImageRespDtoMapping").setParameter(1, id);
-		List<UserProfileImageRespDto> imagesEntity = query.getResultList();
+		String queryString = "SELECT po.id, " +
+				"(SELECT url FROM image im WHERE im.post_id = po.id AND im.sequence = 0) AS image_url," +
+				"(SELECT count(*) FROM likes lk WHERE lk.post_id = po.id) AS like_count, " +
+				"(SELECT count(*) FROM comment ct WHERE ct.post_id = po.id) AS comment_count " +
+				"FROM post po WHERE po.user_id = ? " +
+				"ORDER BY create_date DESC";
+		Query query = em.createNativeQuery(queryString, "UserProfilePostRespDtoMapping").setParameter(1, id);
+		List<UserProfilePostRespDto> postsEntity = query.getResultList();
 
-		imageCount = imagesEntity.size();
+		int postCount = postsEntity.size();
 		
 		// 2. doFollow 수
 		followerCount = followRepository.mCountByFollower(id);
@@ -127,14 +131,14 @@ public class UserService {
 		
 		// 4. 최종마무리
 		return UserProfileRespDto.builder()
-		.pageHost(id==loginUser.getId())
-		.followState(followState)
-		.followerCount(followerCount)
-		.followingCount(followingCount)
-		.imageCount(imageCount)
-		.user(userEntity)
-		.images(imagesEntity) // 수정완료(Dto만듬) (댓글수, 좋아요수)
-		.build();
+				.pageHost(id==loginUser.getId())
+				.followState(followState)
+				.followerCount(followerCount)
+				.followingCount(followingCount)
+				.postCount(postCount)
+				.user(userEntity)
+				.posts(postsEntity) // 수정완료(Dto만듬) (댓글수, 좋아요수)
+				.build();
 	}
 }
 

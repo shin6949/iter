@@ -1,15 +1,8 @@
 package com.cos.iter.domain.noti;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,7 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "notification")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,17 +22,18 @@ public class Noti {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+
 	@Enumerated(EnumType.STRING)
 	private NotiType notiType;
 	
 	@ManyToOne
-	@JoinColumn(name="fromUserId")
+	@JoinColumn(name="from_user_id", foreignKey = @ForeignKey(name="FK_NOTIFICATION_FROM_USER_ID"))
 	private User fromUser;
 	
 	@ManyToOne
-	@JoinColumn(name="toUserId")
+	@JoinColumn(name="to_user_id", foreignKey = @ForeignKey(name="FK_NOTIFICATION_TO_USER_ID"))
 	private User toUser;
 
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 }

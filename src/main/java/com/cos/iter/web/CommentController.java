@@ -24,6 +24,7 @@ public class CommentController {
 	@PostMapping("/comment")
 	public ResponseEntity<?> comment(CommentRespDto commentRespDto) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
+		log.info("CommentRespDto: " + commentRespDto);
 
 		commentService.writeComment(commentRespDto);
 		return new ResponseEntity<String>("ok", HttpStatus.CREATED);

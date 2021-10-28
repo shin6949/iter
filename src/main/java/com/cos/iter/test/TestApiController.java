@@ -14,8 +14,8 @@ import com.cos.iter.domain.follow.Follow;
 import com.cos.iter.domain.follow.FollowRepository;
 import com.cos.iter.domain.image.Image;
 import com.cos.iter.domain.image.ImageRepository;
-import com.cos.iter.domain.like.Likes;
-import com.cos.iter.domain.like.LikesRepository;
+import com.cos.iter.domain.like.Like;
+import com.cos.iter.domain.like.LikeRepository;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.tag.TagRepository;
 import com.cos.iter.domain.user.User;
@@ -38,15 +38,14 @@ public class TestApiController {
 	private FollowRepository followRepository;
 	
 	@Autowired
-	private LikesRepository likeRepository;
+	private LikeRepository likeRepository;
 	
 	@PostMapping("/test/api/join")
 	public User join(@RequestBody User user) {
 		System.out.println("/test/api/join");
 		user.setRole(UserRole.USER); // USER
-		
-		User userEntity = userRepository.save(user);
-		return userEntity;
+
+		return userRepository.save(user);
 	}
 	
 	@PostMapping("/test/api/image/{caption}")
@@ -54,9 +53,6 @@ public class TestApiController {
 		User userEntity = userRepository.findById(1).get();
 		
 		Image image = Image.builder()
-				.location("외국")
-				.caption(caption)
-				.user(userEntity)
 				.build();
 		
 		Image imageEntity = imageRepository.save(image);
@@ -64,11 +60,9 @@ public class TestApiController {
 		List<Tag> tags = new ArrayList<>();
 		Tag tag1 = Tag.builder()
 				.name("#외국")
-				.image(imageEntity)
 				.build();
 		Tag tag2 = Tag.builder()
 				.name("#여행")
-				.image(imageEntity)
 				.build();
 		tags.add(tag1);
 		tags.add(tag2);
@@ -109,8 +103,7 @@ public class TestApiController {
 	public String imageLike(@PathVariable int imageId) {
 		Image imageEntity = imageRepository.findById(imageId).get();
 		User userEntity = userRepository.findById(1).get();
-		Likes like = Likes.builder()
-				.image(imageEntity)
+		Like like = Like.builder()
 				.user(userEntity)
 				.build();
 		likeRepository.save(like);
