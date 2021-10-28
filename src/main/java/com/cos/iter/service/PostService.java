@@ -1,5 +1,6 @@
 package com.cos.iter.service;
 
+import com.cos.iter.IterApplication;
 import com.cos.iter.domain.comment.Comment;
 import com.cos.iter.domain.like.Like;
 import com.cos.iter.domain.post.Post;
@@ -9,6 +10,8 @@ import com.cos.iter.util.Logging;
 import com.cos.iter.web.dto.ImageReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +31,17 @@ public class PostService {
             page = 1;
         }
 
-        List<Post> posts;
+        PageRequest pageRequest = PageRequest.of(page - 1, IterApplication.POSTS_PER_PAGE);
+
+        Page<Post> posts;
         if(tag == null || tag.equals("")) {
-            posts = postRepository.getFeeds(loginUserId, getStartLimitNum(page), getEmdLimitNum(page));
+            posts = postRepository.getFeeds(loginUserId, pageRequest);
         } else {
-            posts = postRepository.getFeeds(tag, getStartLimitNum(page), getEmdLimitNum(page));
+            posts = postRepository.getFeeds(tag, pageRequest);
         }
 
         log.info(logging.getClassName() + " / " + logging.getMethodName());
-        for (Post post : posts) {
+        for (Post post : posts.getContent()) {
             post.setLikeCount(post.getLikes().size());
 
             // doLike 상태 여부 등록
@@ -53,17 +58,18 @@ public class PostService {
             }
         }
 
-        return posts;
+        return posts.getContent();
     }
 
     @Transactional(readOnly = true)
-    public List<Post> getPopularPost(int loginUserId, Integer page) {
+    public Page<Post> getPopularPost(int loginUserId, Integer page) {
         if(page == null) {
             page = 1;
         }
 
-        List<Post> nonFollowPosts = postRepository.getNonFollowPosts(loginUserId, getStartLimitNum(page), getEmdLimitNum(page));
-        log.info("nonFollowPosts: " + nonFollowPosts);
+        PageRequest pageRequest = PageRequest.of(page - 1, IterApplication.POSTS_PER_PAGE);
+        Page<Post> nonFollowPosts = postRepository.getNonFollowPosts(loginUserId, pageRequest);
+        log.info("nonFollowPosts: " + nonFollowPosts.getContent());
 
         return nonFollowPosts;
     }
@@ -77,13 +83,5 @@ public class PostService {
         postRepository.flush();
 
         return post.getId();
-    }
-
-    private int getStartLimitNum(Integer page) {
-        return (page - 1) * 10;
-    }
-
-    private int getEmdLimitNum(Integer page) {
-        return (page * 10) - 1;
     }
 }
