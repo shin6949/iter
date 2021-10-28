@@ -112,10 +112,11 @@ public class UserService {
 		
 		// 1. 이미지들과 전체 이미지 카운트(dto받기)
 		String queryString = "SELECT po.id, " +
-				"(SELECT url FROM image im WHERE im.post_id = po.id AND im.sequence = 0) as image_url," +
-				"(SELECT count(*) FROM likes lk where lk.post_id = po.id) as like_count, " +
-				"(SELECT count(*) FROM comment ct where ct.post_id = po.id) as comment_count " +
-				"from post po where po.user_id = ? ";
+				"(SELECT url FROM image im WHERE im.post_id = po.id AND im.sequence = 0) AS image_url," +
+				"(SELECT count(*) FROM likes lk WHERE lk.post_id = po.id) AS like_count, " +
+				"(SELECT count(*) FROM comment ct WHERE ct.post_id = po.id) AS comment_count " +
+				"FROM post po WHERE po.user_id = ? " +
+				"ORDER BY create_date DESC";
 		Query query = em.createNativeQuery(queryString, "UserProfilePostRespDtoMapping").setParameter(1, id);
 		List<UserProfilePostRespDto> postsEntity = query.getResultList();
 
