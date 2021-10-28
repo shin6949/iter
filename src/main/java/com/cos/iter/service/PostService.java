@@ -26,7 +26,7 @@ public class PostService {
     private final Logging logging;
 
     @Transactional(readOnly = true)
-    public List<Post> getFeedPhoto(int loginUserId, String tag, Integer page){
+    public Page<Post> getFeedPhoto(int loginUserId, String tag, Integer page){
         if(page == null) {
             page = 1;
         }
@@ -58,7 +58,7 @@ public class PostService {
             }
         }
 
-        return posts.getContent();
+        return posts;
     }
 
     @Transactional(readOnly = true)

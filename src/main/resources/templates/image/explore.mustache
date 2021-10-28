@@ -1,16 +1,16 @@
 {{>layout/header}}
 <main id="profile">
 		<div class="profile__photo-grid">
-				{{#posts}}
+				{{#posts.content}}
 				<!-- 유저가 업로드한 Feed 사진 -->
 					<div class="profile__photo">
 						<a href="/user/{{user.id}}">
                             {{#images}}
                                 <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
                             {{/images}}
-						</a>	
-					</div>									
-					{{/posts}}
+						</a>
+					</div>
+					{{/posts.content}}
 		</div>	
 </main>
 
