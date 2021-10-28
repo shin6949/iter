@@ -1,14 +1,13 @@
 package com.cos.iter.domain.user;
 
 import com.cos.iter.web.dto.FollowRespDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @SqlResultSetMapping(
 		name = "FollowRespDtoMapping",
@@ -29,6 +28,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Log4j2
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +41,17 @@ public class User {
 	private String website;
 	private String bio;
 	private String phone;
-	private Boolean gender;
 	private String profileImage;
+	@Transient
+	private String url;
+	private Boolean gender;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 	@CreationTimestamp
-	private Timestamp createDate;
+	private LocalDateTime createDate;
 
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+		this.url = profileImage;
+	}
 }

@@ -30,6 +30,7 @@ import java.util.List;
 @Entity(name = "post")
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode(callSuper = false, exclude = {"tags", "images", "comments", "likes"})
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,20 +52,24 @@ public class Post {
     private String mapImageUrl;
 
     // Image를 select하면 여러개의 Tag가 딸려옴.
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY) // 연관관계 주인의 변수명을 적는다.
-    @JsonIgnoreProperties({"post"}) // Jackson한테 내리는 명령
+    @OneToMany(mappedBy = "post") // 연관관계 주인의 변수명을 적는다.
+    @JsonIgnoreProperties({"post"})
+    @ToString.Exclude // Jackson한테 내리는 명령
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "post")
-    @JsonIgnoreProperties({"post"}) // Jackson한테 내리는 명령
+    @JsonIgnoreProperties({"post"})
+    @ToString.Exclude // Jackson한테 내리는 명령
     private List<Image> images;
 
     @JsonIgnoreProperties({"post"})
     @OneToMany(mappedBy = "post")
+    @ToString.Exclude
     private List<Comment> comments;
 
     @JsonIgnoreProperties({"post"})
     @OneToMany(mappedBy = "post")
+    @ToString.Exclude
     private List<Like> likes;
 
     @Transient
@@ -75,6 +80,10 @@ public class Post {
 
     @Transient
     private Image firstImage;
+
+    public String getUserProfileImage() {
+        return user.getProfileImage();
+    }
 
     @Transient
     private String createDateString;
