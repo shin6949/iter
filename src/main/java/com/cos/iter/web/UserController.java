@@ -45,9 +45,11 @@ public class UserController {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 
 		User userEntity = userService.getUser(loginUser);
+		log.info("user: " + userEntity);
+
 		model.addAttribute("user", userEntity);
 		model.addAttribute("storageUrl", blobStorageUrl);
-		
+
 		return "user/profile-edit";
 	}
 	
