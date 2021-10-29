@@ -79,6 +79,12 @@ public class Post {
     private int likeCount;
 
     @Transient
+    private int commentCount;
+
+    @Transient
+    private int popularRate;
+
+    @Transient
     private boolean likeState;
 
     @Transient

@@ -3,7 +3,7 @@
 
 <main id="profile">
 		<div class="profile__photo-grid">
-				{{#posts.content}}
+				{{#posts}}
 				<!-- 유저가 업로드한 Feed 사진 -->
 					<div class="profile__photo">
 						<a href="/post/detail/{{id}}">
@@ -12,16 +12,16 @@
                             {{/images}}
 						</a>
 					</div>
-					{{/posts.content}}
+					{{/posts}}
 		</div>
 
     <div class="w3-center">
-        {{^posts.isFirst}}
+        {{^isFirst}}
             <a href="/post/explore?page={{prevPage}}"><button id="btn-prev-page" class="w3-btn">&#10094; Prev</button></a>
-        {{/posts.isFirst}}
-        {{^posts.isLast}}
+        {{/isFirst}}
+        {{^isLast}}
             <a href="/post/explore?page={{nextPage}}"><button id="btn-next-page" class="w3-btn">Next &#10095;</button></a>
-        {{/posts.isLast}}
+        {{/isLast}}
     </div>
 </main>
 

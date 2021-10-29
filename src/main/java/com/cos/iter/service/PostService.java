@@ -16,6 +16,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Log4j2
 @RequiredArgsConstructor
@@ -67,16 +69,28 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Post> getPopularPost(int loginUserId, Integer page) {
+    public List<Post> getPopularPost(int loginUserId, Integer page) {
         if(page == null) {
             page = 1;
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, IterApplication.POSTS_PER_PAGE);
-        Page<Post> nonFollowPosts = postRepository.getNonFollowPosts(loginUserId, pageRequest);
-        log.info("nonFollowPosts: " + nonFollowPosts.getContent());
+        List<Post> nonFollowPosts = postRepository.getNonFollowPosts(loginUserId, pageRequest);
+
+        log.info("nonFollowPosts: " + nonFollowPosts);
 
         return nonFollowPosts;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Post> getPopularPostWithPage(int loginUserId, Integer page) {
+        if(page == null) {
+            page = 1;
+        }
+
+        PageRequest pageRequest = PageRequest.of(page - 1, IterApplication.POSTS_PER_PAGE);
+
+        return postRepository.getNonFollowPostsPaging(loginUserId, pageRequest);
     }
 
     @Transactional
