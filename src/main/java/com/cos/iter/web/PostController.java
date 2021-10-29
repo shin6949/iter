@@ -72,12 +72,12 @@ public class PostController {
 
         model.addAttribute("posts", postService.getPopularPost(loginUser.getId(), page));
         model.addAttribute("storageUrl", blobStorageUrl);
+
         return "image/explore";
     }
 
     @GetMapping("/post/detail/{postId}")
-    public String detailView(@LoginUserAnnotation LoginUser loginUser,
-                             @PathVariable(name="postId", required = true) int postId,
+    public String detailView(@LoginUserAnnotation LoginUser loginUser, @PathVariable(name="postId") int postId,
                              Model model) {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser : " + loginUser);
@@ -88,6 +88,7 @@ public class PostController {
         model.addAttribute("posts", post);
         model.addAttribute("storageUrl", blobStorageUrl);
 
+        postService.increaseViewCount(post);
         return "post/detail";
     }
 }
