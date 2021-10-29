@@ -93,11 +93,17 @@ a:hover, a:active { text-decoration: none; }
 		</div>
 	</div>
 	{{/posts.content}}
+
+    <div class="w3-center">
+        {{^posts.isFirst}}
+            <a href="/post?page={{prevPage}}"><button id="btn-prev-page" class="w3-btn">&#10094; Prev</button></a>
+        {{/posts.isFirst}}
+        {{^posts.isLast}}
+            <a href="/post?page={{nextPage}}"><button id="btn-next-page" class="w3-btn">Next &#10095;</button></a>
+        {{/posts.isLast}}
+    </div>
 	
 </main>
-<script>
-
-</script>
 <!--<script src="/js/comment.js"></script>-->
 <!--<script src="/js/like.js"></script>-->
 
