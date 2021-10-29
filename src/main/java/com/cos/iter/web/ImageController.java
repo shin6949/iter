@@ -1,10 +1,12 @@
 package com.cos.iter.web;
 
+import com.cos.iter.config.hanlder.ex.MyUserIdNotFoundException;
 import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +50,7 @@ public class ImageController {
 	}
 	
 	@PostMapping("/image/upload")
+	@Transactional
 	public String imageUpload(@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		log.info("ImageReqDto: " + imageReqDto);
