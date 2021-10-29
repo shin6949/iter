@@ -7,6 +7,7 @@ import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ public class PostController {
     private final PostService postService;
     private final Logging logging;
 
+    @Value("${azure.blob.url}")
+    private String blobStorageUrl;
+
     @GetMapping({"", "/", "/post"})
     public String feed(String tag, @LoginUserAnnotation LoginUser loginUser,
                        @RequestParam(name = "page", defaultValue = "1") int page, Model model) {
@@ -31,6 +35,7 @@ public class PostController {
         log.info("Feed Posts: " + posts);
 
         model.addAttribute("posts", posts);
+        model.addAttribute("storageUrl", blobStorageUrl);
         return "image/feed";
     }
 
@@ -53,6 +58,7 @@ public class PostController {
         }
 
         model.addAttribute("location", location);
+        model.addAttribute("storageUrl", blobStorageUrl);
         return "image/image-upload";
     }
 
@@ -63,6 +69,7 @@ public class PostController {
         log.info("loginUser: " + loginUser);
 
         model.addAttribute("posts", postService.getPopularPost(loginUser.getId(), page));
+        model.addAttribute("storageUrl", blobStorageUrl);
         return "image/explore";
     }
 
