@@ -1,6 +1,7 @@
 package com.cos.iter.domain.user;
 
 import com.cos.iter.web.dto.FollowRespDto;
+import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,26 +35,20 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(unique = true)
+	@NotNull
 	private String username;
+	@NotNull
 	private String password;
+	@NotNull
 	private String email;
+	@NotNull
 	private String name;
-	private String website;
 	private String bio;
-	private String phone;
 	private String profileImage;
-	@Transient
-	private String url;
-	private Boolean gender;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 	@CreationTimestamp
 	private LocalDateTime createDate;
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-		this.url = profileImage;
-	}
 
 	public String getProfileImage() {
 		final String blogStorageUrl = System.getenv("AZURE_BLOB_URL");
