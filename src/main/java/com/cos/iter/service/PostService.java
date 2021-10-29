@@ -48,6 +48,12 @@ public class PostService {
                     post.setLikeState(true);
                 }
             }
+
+            int commentSize = post.getComments().size();
+            if(commentSize > 3) {
+                post.setComments(post.getComments().subList(commentSize - 3, commentSize));
+            }
+
             // 댓글 주인 여부 등록
             for (Comment comment : post.getComments()) {
                 if(comment.getUser().getId() == loginUserId) {
@@ -81,5 +87,29 @@ public class PostService {
         postRepository.flush();
 
         return post.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Post getDetailPost(int loginUserId, int postId) {
+        log.info(logging.getClassName() + " / " + logging.getMethodName());
+        Post post = postRepository.getById(postId);
+
+        post.setLikeCount(post.getLikes().size());
+
+        // doLike 상태 여부 등록
+        for (Like like : post.getLikes()) {
+            if(like.getUser().getId() == loginUserId) {
+                post.setLikeState(true);
+            }
+        }
+
+        // 댓글 주인 여부 등록
+        for (Comment comment : post.getComments()) {
+            if(comment.getUser().getId() == loginUserId) {
+                comment.setCommentHost(true);
+            }
+        }
+
+        return post;
     }
 }

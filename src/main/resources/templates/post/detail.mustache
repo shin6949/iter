@@ -1,0 +1,107 @@
+{{>layout/header}}
+{{#posts}}
+<style>
+    a { text-decoration: none; color: black; }
+    a:visited { text-decoration: none; }
+    a:hover { text-decoration: none; }
+    a:focus { text-decoration: none; }
+    a:hover, a:active { text-decoration: none; }
+</style>
+<div class="photo u-default-box">
+    <header class="photo__header">
+        <a href="/user/{{user.id}}">
+            <img src="{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
+                 onerror="this.src='{{storageUrl}}/static/avatar.jpg'" />
+        </a>
+
+        <a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>
+    </header>
+    <div class="photo_post_image"> <!-- 사진꽉채우기 css -->
+        {{#images}}
+            <img class="mySlides img-{{post.id}}" src="{{url}}" />
+        {{/images}}
+    </div>
+    <div class="w3-center">
+        <button id="btn-prev-{{id}}" class="w3-btn" onclick="plusDivs(-1, 'img-{{id}}')">&#10094; Prev</button>
+        <button id="btn-next-{{id}}" class="w3-btn" onclick="plusDivs(1, 'img-{{id}}')">Next &#10095;</button>
+    </div>
+
+    <div class="photo__info">
+        <div class="photo__actions">
+				<span class="photo__action">
+					{{#likeState}}
+                        <i class="fa heart heart-clicked fa-heart" onclick="unLike({{id}})"></i>
+                    {{/likeState}}
+                    {{^likeState}}
+                        <i class="fa fa-heart-o heart" onclick="like({{id}})"></i>
+                    {{/likeState}}
+				</span>
+        </div>
+
+        <div class="photo_tag">
+            {{#tags}}
+                <a href="/post?tag={{name}}">#{{name}} </a>
+            {{/tags}}
+        </div>
+
+        <span class="photo__likes">{{likeCount}} likes</span>
+        <br/>
+        <span style="font-size:14px;">{{content}}</span>
+        <br/>
+        <ul class="photo__comments">
+            {{#comments}}
+                <li class="photo__comment">
+                    <a href="/user/{{user.id}}" ><span class="photo__comment-author">{{user.username}}</span></a>
+                    <span style="font-size:12px;">{{content}}</span>
+                    {{#commentHost}}
+                        <i onclick="commentDelete({{id}})" class="fa fa-trash"></i>
+                    {{/commentHost}}
+                </li>
+            {{/comments}}
+        </ul>
+        <span class="photo__date">{{createDateString}}</span>
+
+        <div class="photo__add-comment-container">
+            <form id="frm-{{id}}" style="width:100%;">
+                <input type="hidden" name="userId" value="{{loginUser.id}}" />
+                <input type="hidden" name="postId" value="{{id}}" />
+                <textarea id="content-{{id}}" name="content"  placeholder="Add a comment..."></textarea>
+            </form>
+            <i onclick="commentSend({{id}})" class="fa fa-angle-right"></i>
+        </div>
+    </div>
+</div>
+{{/posts}}
+
+</main>
+<script type="text/javascript">
+        {{>js/comment}}
+        {{>js/like}}
+</script>
+
+<script>
+    var slideIndex = 1;
+        {{#posts}}
+        showDivs(slideIndex, 'img-{{id}}');
+        if(document.getElementsByClassName('mySlides img-{{id}}').length === 1) {
+            document.getElementById("btn-prev-{{id}}").style.display="none";
+            document.getElementById("btn-next-{{id}}").style.display="none";
+        }
+        {{/posts}}
+
+    function plusDivs(n, class_id) {
+        showDivs(slideIndex += n, class_id);
+    }
+
+    function showDivs(n, class_id) {
+        var i;
+        var x = document.getElementsByClassName(class_id);
+        if (n > x.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = x.length}
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        x[slideIndex-1].style.display = "block";
+    }
+</script>
+{{>layout/footer}}

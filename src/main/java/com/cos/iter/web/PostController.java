@@ -7,11 +7,13 @@ import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -73,4 +75,19 @@ public class PostController {
         return "image/explore";
     }
 
+    @GetMapping("/post/detail/{postId}")
+    public String detailView(@LoginUserAnnotation LoginUser loginUser,
+                             @PathVariable(name="postId", required = true) int postId,
+                             Model model) {
+        log.info(logging.getClassName() + " / " + logging.getMethodName());
+        log.info("loginUser : " + loginUser);
+
+        Post post = postService.getDetailPost(loginUser.getId(), postId);
+        log.info("Got Post: " + post);
+
+        model.addAttribute("posts", post);
+        model.addAttribute("storageUrl", blobStorageUrl);
+
+        return "post/detail";
+    }
 }
