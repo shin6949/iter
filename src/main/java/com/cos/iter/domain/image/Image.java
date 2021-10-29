@@ -24,12 +24,18 @@ public class Image {
 
 	private float longitude;
 
-	@ManyToOne()
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_IMAGE_POST_ID"))
 	private Post post;
 
 	@Column(columnDefinition = "smallint default 0")
 	private short sequence;
+
+	public String getUrl() {
+		final String blogStorageUrl = System.getenv("AZURE_BLOB_URL");
+
+		return blogStorageUrl + "/photo/" + url;
+	}
 }
 
 

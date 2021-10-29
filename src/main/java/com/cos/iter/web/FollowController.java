@@ -3,6 +3,7 @@ package com.cos.iter.web;
 import java.util.List;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,12 +28,16 @@ public class FollowController {
 	private final FollowService followService;
 
 	private final String controllerName = "FollowController / ";
-	
+
+	@Value("${azure.blob.url}")
+	private String blobStorageUrl;
+
 	@GetMapping("/follow/followingList/{pageUserId}")
 	public String followingList(@PathVariable int pageUserId, @LoginUserAnnotation LoginUser loginUser, Model model) {
 		log.info(controllerName + "followingList");
 
 		model.addAttribute("followingList", followService.getFollowingList(loginUser.getId(), pageUserId));
+		model.addAttribute("storageUrl", blobStorageUrl);
 		return "follow/following-list";
 	}
 	
@@ -41,6 +46,7 @@ public class FollowController {
 		log.info(controllerName + "followerList");
 
 		model.addAttribute("followerList", followService.getFollowerList(loginUser.getId(), pageUserId));
+		model.addAttribute("storageUrl", blobStorageUrl);
 		return "follow/follower-list";
 	}
 	

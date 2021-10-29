@@ -3,7 +3,7 @@
 <main id="feed">
 
     {{^posts.content}}
-        <img src="/images/3.PNG" align="center"/>
+        <img src="{{storageUrl}}/static/3.PNG" align="center"/>
     <font size="5px">
     <pre>
 
@@ -30,15 +30,15 @@ a:hover, a:active { text-decoration: none; }
 	<div class="photo u-default-box">
 		<header class="photo__header">
             <a href="/user/{{user.id}}">
-                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
-                     onerror="this.src='/images/avatar.jpg'" />
+                <img src="{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
+                     onerror="this.src='{{storageUrl}}/static/avatar.jpg'" />
             </a>
 
 			<a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
             {{#images}}
-                <img class="mySlides img-{{post.id}}" src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
+                <img class="mySlides img-{{post.id}}" src="{{url}}" />
             {{/images}}
 		</div>
         <div class="w3-center">
@@ -60,11 +60,13 @@ a:hover, a:active { text-decoration: none; }
 			
             <div class="photo_tag">
                 {{#tags}}
-                    <a href="/post?tag={{name}}"/>#{{name}}
+                    <a href="/post?tag={{name}}">#{{name}} </a>
                 {{/tags}}
 			</div>
+
 			<span class="photo__likes">{{likeCount}} likes</span>
-			<br/>
+            <span style="font-size:14px;">    <a href="/post/detail/{{id}}">자세히 보기</a></span>
+            <br/>
             <span style="font-size:14px;">{{content}}</span>
             <br/>
 			<ul class="photo__comments">
@@ -91,11 +93,17 @@ a:hover, a:active { text-decoration: none; }
 		</div>
 	</div>
 	{{/posts.content}}
+
+    <div class="w3-center">
+        {{^posts.isFirst}}
+            <a href="/post?page={{prevPage}}"><button id="btn-prev-page" class="w3-btn">&#10094; Prev</button></a>
+        {{/posts.isFirst}}
+        {{^posts.isLast}}
+            <a href="/post?page={{nextPage}}"><button id="btn-next-page" class="w3-btn">Next &#10095;</button></a>
+        {{/posts.isLast}}
+    </div>
 	
 </main>
-<script>
-
-</script>
 <!--<script src="/js/comment.js"></script>-->
 <!--<script src="/js/like.js"></script>-->
 

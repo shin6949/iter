@@ -1,17 +1,28 @@
 {{>layout/header}}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 <main id="profile">
 		<div class="profile__photo-grid">
-				{{#posts.content}}
+				{{#posts}}
 				<!-- 유저가 업로드한 Feed 사진 -->
 					<div class="profile__photo">
-						<a href="/user/{{user.id}}">
+						<a href="/post/detail/{{id}}">
                             {{#images}}
-                                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
+                                <img src="{{url}}" />
                             {{/images}}
 						</a>
 					</div>
-					{{/posts.content}}
-		</div>	
+					{{/posts}}
+		</div>
+
+    <div class="w3-center">
+        {{^isFirst}}
+            <a href="/post/explore?page={{prevPage}}"><button id="btn-prev-page" class="w3-btn">&#10094; Prev</button></a>
+        {{/isFirst}}
+        {{^isLast}}
+            <a href="/post/explore?page={{nextPage}}"><button id="btn-next-page" class="w3-btn">Next &#10095;</button></a>
+        {{/isLast}}
+    </div>
 </main>
 
 {{>layout/footer}}

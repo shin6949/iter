@@ -6,8 +6,8 @@
 				<input type="file" name="profileImage" style="display: none;" />
 				<input type="hidden" name="userId" value="{{respDto.user.id}}" />
 			</form>
-			<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"
-				style="cursor: pointer" onerror="this.src='/images/avatar.jpg'" />
+			<img src="{{#respDto.user.profileImage}}{{respDto.user.profileImage}}{{/respDto.user.profileImage}}" id="profile_image"
+				style="cursor: pointer" onerror="this.src='{{storageUrl}}/static/avatar.jpg'" />
 		</div>
 		
 		<div class="profile__info">
@@ -68,7 +68,7 @@
 				{{#respDto.posts}}
 					<div class="profile__photo">
 						<a href="#"> 
-							<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{imageUrl}}">
+							<img src="{{imageUrl}}">
 						</a>
 						<div class="profile__photo-overlay">
 							<span class="profile__photo-stat"> 
@@ -78,7 +78,7 @@
 								<i class="fa fa-comment"></i> {{commentCount}}
 							</span>
 						</div>
-					</div>									
+					</div>
 				{{/respDto.posts}}
 				
 		</div>	

@@ -65,10 +65,7 @@ public class UserService {
 			}
 		});
 		userEntity.setName(user.getName());
-		userEntity.setWebsite(user.getWebsite());
 		userEntity.setBio(user.getBio());
-		userEntity.setPhone(user.getPhone());
-		userEntity.setGender(user.getGender());
 	}
 	
 	@Transactional(readOnly = true)
