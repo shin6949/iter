@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @Log4j2
@@ -73,11 +75,13 @@ public class PostController {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser: " + loginUser);
 
-        Page<Post> posts = postService.getPopularPost(loginUser.getId(), page);
+        List<Post> posts = postService.getPopularPost(loginUser.getId(), page);
         model.addAttribute("posts", posts);
         model.addAttribute("storageUrl", blobStorageUrl);
-        model.addAttribute("prevPage", posts.getNumber());
-        model.addAttribute("nextPage", posts.getNumber() + 2);
+
+        Page<Post> postsWithPaging = postService.getPopularPostWithPage(loginUser.getId(), page);
+        model.addAttribute("prevPage", postsWithPaging.getNumber());
+        model.addAttribute("nextPage", postsWithPaging.getNumber() + 2);
 
         return "image/explore";
     }

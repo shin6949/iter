@@ -9,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,9 +34,10 @@ public class PostTests {
     @Test
     public void getNonFollowPostsWithPagingTest() {
         PageRequest pageRequest = PageRequest.of(0, 2);
-        Page<Post> result = postRepository.getNonFollowPosts(2, pageRequest);
-        log.info("Total Page: " + result.getTotalPages());
-        log.info("List Size: " + result.getContent().size());
-        log.info("Contents: " + result.getContent());
+        List<Post> result = postRepository.getNonFollowPosts(2, pageRequest);
+
+        log.info("List Size: " + result.size());
+        log.info("Contents: " + result);
     }
+
 }
