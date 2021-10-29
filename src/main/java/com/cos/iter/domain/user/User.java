@@ -9,7 +9,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @SqlResultSetMapping(
 		name = "FollowRespDtoMapping",
 		classes = @ConstructorResult(
@@ -44,7 +43,11 @@ public class User {
 	@NotNull
 	private String name;
 	private String bio;
+
 	private String profileImage;
+	@Transient
+	private String url;
+	private Boolean gender;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 	@CreationTimestamp

@@ -94,7 +94,6 @@ public class Post {
     @NotNull
     @ColumnDefault("0")
     private int viewCount;
-
     public String getUserProfileImage() {
         return user.getProfileImage();
     }
