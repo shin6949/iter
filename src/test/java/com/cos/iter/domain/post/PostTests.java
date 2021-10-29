@@ -39,5 +39,4 @@ public class PostTests {
         log.info("List Size: " + result.size());
         log.info("Contents: " + result);
     }
-
 }
