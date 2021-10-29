@@ -14,4 +14,10 @@ public class FollowRespDto {
 	private String profileImage;
 	private boolean followState;
 	private boolean equalUserState;
+
+	public String getProfileImage() {
+		final String blogStorageUrl = System.getenv("AZURE_BLOB_URL");
+
+		return blogStorageUrl + "/profile/" + profileImage;
+	}
 }

@@ -3,7 +3,7 @@
 <main id="feed">
 
     {{^posts.content}}
-        <img src="/images/3.PNG" align="center"/>
+        <img src="{{storageUrl}}/static/3.PNG" align="center"/>
     <font size="5px">
     <pre>
 
@@ -31,7 +31,7 @@ a:hover, a:active { text-decoration: none; }
 		<header class="photo__header">
             <a href="/user/{{user.id}}">
                 <img src="{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
-                     onerror="this.src='/images/avatar.jpg'" />
+                     onerror="this.src='{{storageUrl}}/static/avatar.jpg'" />
             </a>
 
 			<a class="photo__username" href="/user/{{user.id}}">{{user.username}}</a>

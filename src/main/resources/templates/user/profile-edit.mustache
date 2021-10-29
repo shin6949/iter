@@ -6,7 +6,7 @@
 		<header class="edit-profile__header">
 			<div class="fucker-container">
 				<img src="{{#user.profileImage}}{{user.profileImage}}{{/user.profileImage}}"
-				onerror="this.src='/images/avatar.jpg'" />
+				onerror="this.src='{{storageUrl}}/static/avatar.jpg'" />
 			</div>
 			<!-- master comments -->
 			<h1 class="edit-profile__username">{{user.username}}</h1>

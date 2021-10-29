@@ -8,6 +8,7 @@ import com.cos.iter.util.Logging;
 import com.cos.iter.web.dto.UserProfileRespDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -22,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 	private final UserService userService;
 	private final Logging logging;
+
+	@Value("${azure.blob.url}")
+	private String blobStorageUrl;
 	
 	@GetMapping("/user/{id}")
 	public String profile(@PathVariable int id, @LoginUserAnnotation LoginUser loginUser, Model model) {
@@ -32,6 +36,7 @@ public class UserController {
 		model.addAttribute("respDto", userProfileRespDto);
 		log.info("UserProfileRespDto: " + userProfileRespDto);
 
+		model.addAttribute("storageUrl", blobStorageUrl);
 		return "user/profile";
 	}
 	
@@ -41,6 +46,8 @@ public class UserController {
 
 		User userEntity = userService.getUser(loginUser);
 		model.addAttribute("user", userEntity);
+		model.addAttribute("storageUrl", blobStorageUrl);
+		
 		return "user/profile-edit";
 	}
 	
