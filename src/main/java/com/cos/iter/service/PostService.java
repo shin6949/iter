@@ -56,6 +56,7 @@ public class PostService {
             if(commentSize > 3) {
                 post.setComments(post.getComments().subList(commentSize - 3, commentSize));
             }
+
             // 댓글 주인 여부 등록
             for (Comment comment : post.getComments()) {
                 if(comment.getUser().getId() == loginUserId) {
@@ -79,6 +80,17 @@ public class PostService {
         log.info("nonFollowPosts: " + nonFollowPosts);
 
         return nonFollowPosts;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Post> getPopularPostWithPage(int loginUserId, Integer page) {
+        if(page == null) {
+            page = 1;
+        }
+
+        PageRequest pageRequest = PageRequest.of(page - 1, IterApplication.POSTS_PER_PAGE);
+
+        return postRepository.getNonFollowPostsPaging(loginUserId, pageRequest);
     }
 
     @Transactional
