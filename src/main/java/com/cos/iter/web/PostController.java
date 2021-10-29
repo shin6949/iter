@@ -38,6 +38,9 @@ public class PostController {
 
         model.addAttribute("posts", posts);
         model.addAttribute("storageUrl", blobStorageUrl);
+        model.addAttribute("prevPage", posts.getNumber());
+        model.addAttribute("nextPage", posts.getNumber() + 2);
+
         return "image/feed";
     }
 
@@ -70,8 +73,11 @@ public class PostController {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser: " + loginUser);
 
-        model.addAttribute("posts", postService.getPopularPost(loginUser.getId(), page));
+        Page<Post> posts = postService.getPopularPost(loginUser.getId(), page);
+        model.addAttribute("posts", posts);
         model.addAttribute("storageUrl", blobStorageUrl);
+        model.addAttribute("prevPage", posts.getNumber());
+        model.addAttribute("nextPage", posts.getNumber() + 2);
 
         return "image/explore";
     }
