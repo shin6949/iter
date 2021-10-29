@@ -7,17 +7,17 @@
 <title>Iter</title>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<link rel="shortcut icon" href="/images/favicon.ico">
+<link rel="shortcut icon" href="{{storageUrl}}/static/favicon.ico">
 <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 	<main id="login">
 		<div class="login__column">
-			<img src="/images/phoneImage.png" />
+			<img src="{{storageUrl}}/static/phoneImage.png" />
 		</div>
 		<div class="login__column">
 			<div class="login__box">
-				<img src="/images/loginLogo.png" />
+				<img src="{{storageUrl}}/static/loginLogo.png" />
 				<form action="/auth/join" method="post" class="login__form">
 					<input type="email" name="email" placeholder="Email" required> 
 					<input type="text" name="name" placeholder="Name" required> 

@@ -7,7 +7,9 @@ import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.user.User;
 import com.cos.iter.web.dto.UserProfilePostRespDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -45,35 +47,42 @@ public class Post {
     @CreationTimestamp
     private LocalDateTime createDate;
 
-    @ManyToOne
+    @NotNull
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="user_id", foreignKey = @ForeignKey(name="FK_POST_USER_ID"))
     private User user;
 
     private String mapImageUrl;
 
     // Image를 select하면 여러개의 Tag가 딸려옴.
-    @OneToMany(mappedBy = "post") // 연관관계 주인의 변수명을 적는다.
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE) // 연관관계 주인의 변수명을 적는다.
     @JsonIgnoreProperties({"post"})
     @ToString.Exclude // Jackson한테 내리는 명령
     private List<Tag> tags;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties({"post"})
     @ToString.Exclude // Jackson한테 내리는 명령
     private List<Image> images;
 
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Comment> comments;
 
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     @ToString.Exclude
     private List<Like> likes;
 
     @Transient
     private int likeCount;
+
+    @Transient
+    private int commentCount;
+
+    @Transient
+    private int popularRate;
 
     @Transient
     private boolean likeState;
@@ -82,16 +91,15 @@ public class Post {
     @ToString.Exclude
     private Image firstImage;
 
+    @NotNull
+    @ColumnDefault("0")
+    private int viewCount;
     public String getUserProfileImage() {
         return user.getProfileImage();
     }
 
-    @Transient
-    private String createDateString;
-
     public String getCreateDateString() {
-        this.createDateString = getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
-        return createDateString;
+        return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
 
     public Image getFirstImage() {

@@ -1,9 +1,12 @@
 package com.cos.iter.web;
 
+import com.cos.iter.config.hanlder.ex.MyUserIdNotFoundException;
 import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,9 @@ public class ImageController {
 	private final PostService postService;
 	private final Logging logging;
 
+	@Value("${azure.blob.url}")
+	private String blobStorageUrl;
+
 	@GetMapping("/image/uploadForm")
 	public String imageUploadForm(@RequestParam(name = "location", required = false) String location,
 								  @RequestParam(name = "lot", required = false) float lot,
@@ -38,10 +44,13 @@ public class ImageController {
 		model.addAttribute("location", location);
 		model.addAttribute("longitude", lot);
 		model.addAttribute("latitude", lat);
+
+		model.addAttribute("storageUrl", blobStorageUrl);
 		return "image/image-upload";
 	}
 	
 	@PostMapping("/image/upload")
+	@Transactional
 	public String imageUpload(@LoginUserAnnotation LoginUser loginUser, ImageReqDto imageReqDto) {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		log.info("ImageReqDto: " + imageReqDto);

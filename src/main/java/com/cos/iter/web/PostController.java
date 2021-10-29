@@ -7,12 +7,17 @@ import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.dom4j.rule.Mode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PostController {
     private final PostService postService;
     private final Logging logging;
+
+    @Value("${azure.blob.url}")
+    private String blobStorageUrl;
 
     @GetMapping({"", "/", "/post"})
     public String feed(String tag, @LoginUserAnnotation LoginUser loginUser,
@@ -31,6 +39,10 @@ public class PostController {
         log.info("Feed Posts: " + posts);
 
         model.addAttribute("posts", posts);
+        model.addAttribute("storageUrl", blobStorageUrl);
+        model.addAttribute("prevPage", posts.getNumber());
+        model.addAttribute("nextPage", posts.getNumber() + 2);
+
         return "image/feed";
     }
 
@@ -53,6 +65,7 @@ public class PostController {
         }
 
         model.addAttribute("location", location);
+        model.addAttribute("storageUrl", blobStorageUrl);
         return "image/image-upload";
     }
 
@@ -62,8 +75,30 @@ public class PostController {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser: " + loginUser);
 
-        model.addAttribute("posts", postService.getPopularPost(loginUser.getId(), page));
+        List<Post> posts = postService.getPopularPost(loginUser.getId(), page);
+        model.addAttribute("posts", posts);
+        model.addAttribute("storageUrl", blobStorageUrl);
+
+        Page<Post> postsWithPaging = postService.getPopularPostWithPage(loginUser.getId(), page);
+        model.addAttribute("prevPage", postsWithPaging.getNumber());
+        model.addAttribute("nextPage", postsWithPaging.getNumber() + 2);
+
         return "image/explore";
     }
 
+    @GetMapping("/post/detail/{postId}")
+    public String detailView(@LoginUserAnnotation LoginUser loginUser, @PathVariable(name="postId") int postId,
+                             Model model) {
+        log.info(logging.getClassName() + " / " + logging.getMethodName());
+        log.info("loginUser : " + loginUser);
+
+        Post post = postService.getDetailPost(loginUser.getId(), postId);
+        log.info("Got Post: " + post);
+
+        model.addAttribute("posts", post);
+        model.addAttribute("storageUrl", blobStorageUrl);
+
+        postService.increaseViewCount(post);
+        return "post/detail";
+    }
 }
