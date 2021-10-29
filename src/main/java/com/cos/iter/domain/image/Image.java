@@ -24,7 +24,7 @@ public class Image {
 
 	private float longitude;
 
-	@ManyToOne()
+	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_IMAGE_POST_ID"))
 	private Post post;
 
