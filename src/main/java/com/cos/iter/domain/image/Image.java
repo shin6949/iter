@@ -30,6 +30,12 @@ public class Image {
 
 	@Column(columnDefinition = "smallint default 0")
 	private short sequence;
+
+	public String getUrl() {
+		final String blogStorageUrl = System.getenv("AZURE_BLOB_URL");
+
+		return blogStorageUrl + "/photo/" + url;
+	}
 }
 
 

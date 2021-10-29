@@ -30,7 +30,7 @@ a:hover, a:active { text-decoration: none; }
 	<div class="photo u-default-box">
 		<header class="photo__header">
             <a href="/user/{{user.id}}">
-                <img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
+                <img src="{{#user.profileImage}}{{getUserProfileImage}}{{/user.profileImage}}"
                      onerror="this.src='/images/avatar.jpg'" />
             </a>
 
@@ -38,7 +38,7 @@ a:hover, a:active { text-decoration: none; }
 		</header>
 		<div class="photo_post_image"> <!-- 사진꽉채우기 css -->
             {{#images}}
-                <img class="mySlides img-{{post.id}}" src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/photo/{{url}}" />
+                <img class="mySlides img-{{post.id}}" src="{{url}}" />
             {{/images}}
 		</div>
         <div class="w3-center">

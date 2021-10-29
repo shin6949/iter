@@ -6,8 +6,8 @@ import lombok.extern.log4j.Log4j2;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
 
 @SqlResultSetMapping(
 		name = "FollowRespDtoMapping",
@@ -53,5 +53,11 @@ public class User {
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
 		this.url = profileImage;
+	}
+
+	public String getProfileImage() {
+		final String blogStorageUrl = System.getenv("AZURE_BLOB_URL");
+
+		return blogStorageUrl + "/profile/" + profileImage;
 	}
 }

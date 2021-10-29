@@ -6,7 +6,7 @@
 		<li class="explore__user">
 			<div class="explore__content">
 				<a href="/user/{{id}}">
-					<img src="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/profile/{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" />
+					<img src="{{#profileImage}}{{profileImage}}{{/profileImage}}" onerror="this.src='/images/avatar.jpg'" />
 				</a>
 				<div class="explore__info">
 					<span class="explore__username">{{username}}</span> <span
