@@ -1,6 +1,5 @@
 package com.cos.iter.web;
 
-import com.cos.iter.config.hanlder.ex.MyUserIdNotFoundException;
 import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
 import lombok.extern.log4j.Log4j2;
