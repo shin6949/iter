@@ -75,6 +75,17 @@ public class Post {
     @ToString.Exclude
     private List<Like> likes;
 
+    @NotNull
+    @ColumnDefault("0")
+    private int viewCount;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    @ColumnDefault("true")
+    private boolean visible;
+
+    @Transient
+    private boolean postHost;
+
     @Transient
     private int likeCount;
 
@@ -91,9 +102,6 @@ public class Post {
     @ToString.Exclude
     private Image firstImage;
 
-    @NotNull
-    @ColumnDefault("0")
-    private int viewCount;
     public String getUserProfileImage() {
         return user.getProfileImage();
     }
