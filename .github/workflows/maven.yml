@@ -1,39 +1,23 @@
 name: Build And Test
 
-on:
-  push:
-    branches:
-      - shin
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-18.04
-    services:
-      mysql:
-        image: mariadb:10.6.4
-        env:
-          MYSQL_ROOT_PASSWORD: testuser6949
-          MYSQL_DATABASE: maventest
-        ports: # 열어줄 포트, 8080:3306 형태로도 가능
-          - 3306
-        options: >-  # 서비스에 걸어줄 옵션
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: verify MySQL connection from host
-        run: |
-          mysql --version
-          sudo apt-get install -y mysql-client
-          sudo service mysql start
-          mysql -uroot -ptestuser6949 -e "CREATE DATABASE maventest"
-          mysql -uroot -ptestuser6949 -e "SHOW DATABASES"
+      - name: Set Up mariaDB
+        uses: getong/mariadb-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: maventest
+          mysql root password: testuser6949
+          mysql user: test
+          mysql password: testuser6949
 
       - name: Make .env file
         uses: SpicyPizza/create-envfile@v1

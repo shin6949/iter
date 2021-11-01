@@ -5,14 +5,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import lombok.extern.log4j.Log4j2;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.cos.iter.web.dto.JoinReqDto;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Log4j2
@@ -33,7 +31,7 @@ public class ImageControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		mvc = MockMvcBuilders
 				.webAppContextSetup(context)
@@ -48,8 +46,8 @@ public class ImageControllerTest {
 		String email = "kakaofriends@nate.com";
 		String name = "카카오프렌즈";
 
-		String url = "http://localhost:"+port+"/auth/join";
-		log.info("url : "+  url);
+		String url = "http://localhost:" + port + "/auth/join";
+		log.info("url : " +  url);
 		JoinReqDto user = JoinReqDto.builder()
 				.username(username)
 				.password(password)
