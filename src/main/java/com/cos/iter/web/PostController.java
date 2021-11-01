@@ -80,8 +80,11 @@ public class PostController {
         model.addAttribute("storageUrl", blobStorageUrl);
 
         Page<Post> postsWithPaging = postService.getPopularPostWithPage(loginUser.getId(), page);
+        log.info("postsWithPaging: " + postsWithPaging);
         model.addAttribute("prevPage", postsWithPaging.getNumber());
         model.addAttribute("nextPage", postsWithPaging.getNumber() + 2);
+        model.addAttribute("isFirst", postsWithPaging.isFirst());
+        model.addAttribute("isLast", postsWithPaging.isLast());
 
         return "image/explore";
     }
