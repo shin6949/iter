@@ -3,15 +3,48 @@ name: Build And Test
 on:
   push:
     branches:
-      - master
+      - shin
 
 jobs:
   test:
     runs-on: ubuntu-18.04
+    services:
+      mysql:
+        image: mariadb:10.6.4
+        env:
+          MYSQL_ROOT_PASSWORD: testuser6949
+          MYSQL_DATABASE: maventest
+        ports: # 열어줄 포트, 8080:3306 형태로도 가능
+          - 3306
+        options: >-  # 서비스에 걸어줄 옵션
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: verify MySQL connection from host
+        run: |
+          mysql --version
+          sudo apt-get install -y mysql-client
+          sudo service mysql start
+          mysql -uroot -ptestuser6949 -e "CREATE DATABASE maventest"
+          mysql -uroot -ptestuser6949 -e "SHOW DATABASES"
+
+      - name: Make .env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          DB_URL: jdbc:mariadb://127.0.0.1:3306/maventest
+          DB_USER: root
+          DB_PASSWORD: testuser6949
+          WEBAPP_PREFIX: ""
+          COS_SECRET: ${{ secrets.COS_SECRET }}
+          AZURE_CONNECT_STRING: ${{ secrets.AZURE_CONNECT_STRING }}
+          AZURE_BLOB_URL: ${{ secrets.AZURE_BLOB_URL }}
 
       - name: Setup Java JDK
         uses: actions/setup-java@v2.2.0
@@ -29,41 +62,10 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Test with Maven
-        run: mvn test
+        run: mvn test -Dspring.profiles.active=test
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           files: ./target/surefire-reports/*.xml
-
-  build:
-    runs-on: ubuntu-18.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v2.2.0
-        with:
-          java-version: 11
-          distribution: 'adopt'
-
-      - name: Load Maven Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml -DskipTests
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: iter-${{job.id}}
-          path: ./target/iter-*.jar
