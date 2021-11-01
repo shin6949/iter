@@ -110,6 +110,7 @@ public class PostService {
         Post post = postRepository.getById(postId);
 
         post.setLikeCount(post.getLikes().size());
+        post.setPostHost(post.getUser().getId() == loginUserId);
 
         // doLike 상태 여부 등록
         for (Like like : post.getLikes()) {
@@ -132,6 +133,14 @@ public class PostService {
     @Async
     public void increaseViewCount(Post post) {
         post.setViewCount(post.getViewCount() + 1);
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void setPostNotVisible(int postId) {
+        Post post = postRepository.getById(postId);
+        post.setVisible(false);
+
         postRepository.save(post);
     }
 }
