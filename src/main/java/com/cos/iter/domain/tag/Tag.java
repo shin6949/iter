@@ -16,6 +16,10 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor
 @Builder
 public class Tag {
+	public Tag(String name) {
+		this.name = name;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
