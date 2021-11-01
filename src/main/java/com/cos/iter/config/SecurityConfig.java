@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -42,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "/user/**", "/follow/**", "/image/**").authenticated()
 				.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 //		.anyRequest().permitAll()
+				.antMatchers("/auth/**").permitAll()
 				.and()
 				.formLogin()
 				.loginPage("/auth/loginForm")
