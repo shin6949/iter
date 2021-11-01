@@ -30,14 +30,19 @@
 
     <div class="photo__info">
         <div class="photo__actions">
-				<span class="photo__action">
-					{{#likeState}}
-                        <i class="fa heart heart-clicked fa-heart" onclick="unLike({{id}})"></i>
-                    {{/likeState}}
-                    {{^likeState}}
-                        <i class="fa fa-heart-o heart" onclick="like({{id}})"></i>
-                    {{/likeState}}
-				</span>
+            <span class="photo__action">
+                {{#likeState}}
+                    <i class="fa heart heart-clicked fa-heart" onclick="unLike({{id}})"></i>
+                {{/likeState}}
+                {{^likeState}}
+                    <i class="fa fa-heart-o heart" onclick="like({{id}})"></i>
+                {{/likeState}}
+            </span>
+            <span class="photo__action">
+                {{#postHost}}
+                <i onclick="postDelete({{id}})" class="fa fa-trash"></i>
+                {{/postHost}}
+            </span>
         </div>
 
         <div class="photo_tag">
@@ -78,8 +83,19 @@
 
 </main>
 <script type="text/javascript">
-        {{>js/comment}}
-        {{>js/like}}
+    function postDelete(postId) {
+        fetch("/post/" + postId, {
+            method: "delete"
+        }).then(function (res) {
+            return res.text();
+        }).then(function (res) {
+            alert("게시글이 삭제되었습니다.");
+            location.href="/";
+        });
+    }
+
+    {{>js/comment}}
+    {{>js/like}}
 </script>
 
 <script>
