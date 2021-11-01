@@ -1,6 +1,6 @@
 name: Build And Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   test:
@@ -19,17 +19,6 @@ jobs:
           mysql user: test
           mysql password: testuser6949
 
-      - name: Make .env file
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          DB_URL: jdbc:mariadb://127.0.0.1:3306/maventest
-          DB_USER: root
-          DB_PASSWORD: testuser6949
-          WEBAPP_PREFIX: ""
-          COS_SECRET: ${{ secrets.COS_SECRET }}
-          AZURE_CONNECT_STRING: ${{ secrets.AZURE_CONNECT_STRING }}
-          AZURE_BLOB_URL: ${{ secrets.AZURE_BLOB_URL }}
-
       - name: Setup Java JDK
         uses: actions/setup-java@v2.2.0
         with:
@@ -47,6 +36,13 @@ jobs:
 
       - name: Test with Maven
         run: mvn test -Dspring.profiles.active=test
+        env:
+          DB_URL: jdbc:mariadb://127.0.0.1:3306/maventest
+          DB_USER: root
+          DB_PASSWORD: testuser6949
+          COS_SECRET: ${{ secrets.COS_SECRET }}
+          AZURE_CONNECT_STRING: ${{ secrets.AZURE_CONNECT_STRING }}
+          AZURE_BLOB_URL: ${{ secrets.AZURE_BLOB_URL }}
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
