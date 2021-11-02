@@ -3,9 +3,7 @@ package com.cos.iter.domain.post;
 import com.cos.iter.domain.tag.Tag;
 import com.cos.iter.domain.user.User;
 import com.cos.iter.domain.user.UserRepository;
-import com.cos.iter.web.dto.JoinReqDto;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +12,15 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -49,7 +48,7 @@ public class PostTest {
     private final int sizePerPage = 2;
     private final int pageNum = 0;
 
-    @BeforeAll
+    @BeforeTransaction
     public void saveMockData() throws Exception {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
