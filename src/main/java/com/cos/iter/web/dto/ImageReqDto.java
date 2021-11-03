@@ -12,18 +12,19 @@ import java.util.List;
 
 @Data
 public class ImageReqDto {
-	private MultipartHttpServletRequest file;
+	private List<MultipartFile> file;
 	private String content;
 	private float latitude;
 	private float longitude;
 	private String tags;
 	
-	public Image toImageEntity(String imageUrl, Post postEntity) {
+	public Image toImageEntity(String imageUrl, Post postEntity, short sequence) {
 		return Image.builder()
 				.latitude(latitude)
 				.longitude(longitude)
 				.url(imageUrl)
 				.post(postEntity)
+				.sequence(sequence)
 				.build();
 	}
 
@@ -33,9 +34,9 @@ public class ImageReqDto {
 				.build();
 	}
 
-	public List<MultipartFile> getMultipartFiles() {
-		return file.getFiles("input_img");
-	}
+//	public List<MultipartFile> getMultipartFiles() {
+//		return file.getFiles("file");
+//	}
 }
 
 
