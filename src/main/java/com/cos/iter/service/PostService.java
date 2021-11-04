@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -108,7 +109,14 @@ public class PostService {
     @Transactional(readOnly = true)
     public Post getDetailPost(int loginUserId, int postId) {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
+
         Post post = postRepository.getById(postId);
+
+        try {
+            log.info("Post Service Detail Post: " + post);
+        } catch (EntityNotFoundException entityNotFoundException) {
+            return null;
+        }
 
         post.setLikeCount(post.getLikes().size());
         post.setPostHost(post.getUser().getId() == loginUserId);

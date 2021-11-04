@@ -78,9 +78,9 @@ class PostControllerTest {
         mockMvc.perform(get("/")).andExpect(status().is3xxRedirection());
     }
 
-    @Test
-    @WithMockUser
-    public void feedTestWithUser() throws Exception {
-        mockMvc.perform(get("/")).andExpect(status().is2xxSuccessful());
-    }
+//    @Test
+//    @WithMockUser
+//    public void feedTestWithUser() throws Exception {
+//        mockMvc.perform(get("/")).andExpect(status().is2xxSuccessful());
+//    }
 }
