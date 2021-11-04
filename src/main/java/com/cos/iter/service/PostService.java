@@ -97,6 +97,7 @@ public class PostService {
     public int saveAndReturnId(ImageReqDto imageReqDto, int userId) {
         Post post = imageReqDto.toPostEntity();
 
+        post.setVisible(true);
         post.setUser(userRepository.getById(userId));
         postRepository.save(post);
         postRepository.flush();
