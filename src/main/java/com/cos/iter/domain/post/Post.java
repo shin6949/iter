@@ -81,7 +81,7 @@ public class Post {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     @ColumnDefault("true")
-    private boolean visible;
+    private Boolean visible;
 
     @Transient
     private boolean postHost;

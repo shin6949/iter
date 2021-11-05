@@ -34,7 +34,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(unique = true)
-	@NotNull
 	private String username;
 	@NotNull
 	private String password;
@@ -43,10 +42,10 @@ public class User {
 	@NotNull
 	private String name;
 	private String bio;
-
 	private String profileImage;
 	@Transient
 	private String url;
+	@Column(columnDefinition = "TINYINT(1)")
 	private Boolean gender;
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
