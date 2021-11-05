@@ -5,6 +5,7 @@ import com.cos.iter.config.auth.dto.LoginUser;
 import com.cos.iter.domain.post.Post;
 import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
+import com.cos.iter.util.Script;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,7 +103,7 @@ public class PostController {
         if(post == null || !post.getVisible()) {
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
-            out.println("<script>alert('이 글은 볼 수 없는 글입니다.'); history.go(-1);</script>");
+            out.println(Script.back("이 글은 볼 수 없는 글입니다."));
             out.flush();
 
             return null;
