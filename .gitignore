@@ -1,5 +1,5 @@
 ./.idea
-/src/main/resources/application-*.properties
+/src/main/resources/application-*dev.properties
 /upload
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,intellij,eclipse,azurefunctions
