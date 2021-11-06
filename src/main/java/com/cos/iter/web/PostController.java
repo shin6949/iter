@@ -5,9 +5,9 @@ import com.cos.iter.config.auth.dto.LoginUser;
 import com.cos.iter.domain.post.Post;
 import com.cos.iter.service.PostService;
 import com.cos.iter.util.Logging;
+import com.cos.iter.util.Script;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -90,12 +93,21 @@ public class PostController {
 
     @GetMapping("/post/detail/{postId}")
     public String detailView(@LoginUserAnnotation LoginUser loginUser, @PathVariable(name="postId") int postId,
-                             Model model) {
+                             HttpServletResponse response, Model model) throws IOException {
         log.info(logging.getClassName() + " / " + logging.getMethodName());
         log.info("loginUser : " + loginUser);
 
         Post post = postService.getDetailPost(loginUser.getId(), postId);
         log.info("Got Post: " + post);
+
+        if(post == null || !post.getVisible()) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println(Script.back("이 글은 볼 수 없는 글입니다."));
+            out.flush();
+
+            return null;
+        }
 
         model.addAttribute("posts", post);
         model.addAttribute("storageUrl", blobStorageUrl);
