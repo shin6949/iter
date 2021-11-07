@@ -51,6 +51,10 @@
             {{/tags}}
         </div>
 
+        <span class="location__text" style="font-weight:bold;font-size:20px;">위치</span>
+        <div id="map" style="width:270px; height:140px;margin-right:auto;"></div>
+        <br/>
+
         <span class="photo__likes">{{likeCount}} likes</span>
         <span class="photo__likes">{{viewCount}} Watched</span>
         <br/>
@@ -123,4 +127,40 @@
         x[slideIndex-1].style.display = "block";
     }
 </script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b29e5f1a06b5ed964627df8f7e9c4b9&libraries=services"></script>
+{{#posts}}
+{{#images}}
+<script>
+    // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+    var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng({{latitude}},{{longitude}}), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 마커 생성
+    var markerPosition = new kakao.maps.LatLng({{latitude}},{{longitude}})
+
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    })
+    // 마커 표시
+    marker.setMap(map);
+    //인포윈도우 내용,위치
+    var iwContent = '<div style="padding:5px; font-size:12px;">test</div>',
+            iwPosition = new kakao.maps.LatLng({{latitude}},{{longitude}})
+    //윈포윈도우 생성
+    var infowinodw = new kakao.maps.InfoWindow({
+        position : iwPosition,
+        content : iwContent
+    })
+    //마커 위 윈포윈도우 표시
+    infowinodw.open(map, marker);
+</script>
+{{/images}}
+{{/posts}}
 {{>layout/footer}}
