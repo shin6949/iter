@@ -30,7 +30,7 @@
 </div>
 
 <div class="container">
-    <form action="/image/upload" method="post" enctype="multipart/form-data">
+    <form id="post-upload-form" action="/image/upload" method="post" enctype="multipart/form-data">
         <!-- 1번 사진 업로드 폼 -->
         <div class="container border border-5" id="image-1" style="margin: 20px;">
             <div class="row" style="margin-top: 10px;">
@@ -58,14 +58,8 @@
                         <form>
                             <table>
                                 <tr>
-                                    <td><input class="form-control" type="text" id="placename" placeholder="찾을 위치를 입력하세요." value="목포 시청"></td>
-
-                                    <td>
-                                        <!-- TODO: 검색 아이콘과 통합 필요 -->
-                                        <button class="btn btn-primary" onclick="searchLocation()" value="검색"><i class="fa fa-search"></i></button>
-                                        <!-- <i class="fa fa-search" aria-hidden="true"></i>
-                                        <input class="btn btn-primary" type='button' onclick="searchLocation()" value="검색"> -->
-                                    </td>
+                                    <td><input class="form-control" type="text" id="placename-1" placeholder="찾을 위치를 입력하세요." value=""></td>
+                                    <td><input class="btn btn-primary" type='button' onclick="searchLocation(1)" value="검색"></td>
                                 </tr>
                             </table>
                         </form>
@@ -95,14 +89,14 @@
         </div>
 
         <!-- 사진 추가/삭제 버튼 -->
-        <div class="container border border-5" style="margin: 20px; float: center;">
-            <button style="margin: 10px 0px 10px 0px;" id="add-photo-btn" type="button" class="btn btn-primary">사진 추가</button>
+        <div class="container" style="margin: 25px; float: center;">
+            <button style="margin: 10px 0px 10px 0px;" onclick="add_photo(2)" id="add-photo-btn" type="button" class="btn btn-primary">사진 추가</button>
             <button style="margin: 10px 0px 10px 10px;" id="del-photo-btn" type="button" class="btn btn-danger">x번째 사진 삭제</button>
         </div>
 
         <!-- 게시글 입력 -->
         <div class="container border border-5" style="margin: 20px;">
-            <label for="content" style="margin-top: 5px;">여행 코스 소개</span><br>
+            <label for="content" style="margin-top: 5px;"><h2>여행 코스 소개</h2></span>
                 <textarea cols="100" rows="10" class="form-control" id="content" name="content"
                           placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required></textarea>
         </div>
@@ -110,30 +104,110 @@
 </div>
 </body>
 
+<!-- 사진 폼 추가 스크립트 -->
+<script>
+    function add_photo(num) {
+        console.log("add_photo called - " + num);
+
+        if(num > 4) {
+            alert("더 이상 사진을 추가할 수 없어요!");
+            return;
+        }
+
+        const form = document.getElementById("post-upload-form");
+        const new_photo = document.createElement('div');
+
+        var form_div = "<div class=\"container border border-5\" id=\"image-" + num + "\" style=\"margin: 20px;\">\n" +
+                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<h3>" + num + "번째 사진</h3>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<h3>위치 찾기</h3>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t</div>\n" +
+                "\n" +
+                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
+                "\t\t\t\t\t<!-- File Upload Input -->\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
+                "\t\t\t\t\t\t\t<label for=\"input-img-" + num + "\">사진: </label>\n" +
+                "\t\t\t\t\t\t\t<input type=\"file\" class=\"form-control-file\" id=\"input-img" + num + "\">\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t\n" +
+                "\t\t\t\t\t<!-- Kakao Map Place SearchBar -->\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
+                "\t\t\t\t\t\t\t<form>\n" +
+                "\t\t\t\t\t\t\t\t<table>\n" +
+                "\t\t\t\t\t\t\t\t\t<tr>\n" +
+                "\t\t\t\t\t\t\t\t\t\t<td><input class=\"form-control\" type=\"text\" id=\"placename-" + num + "\" placeholder=\"찾을 위치를 입력하세요.\" value=\"\"></td>\n" +
+                "\t\t\t\t\t\t\t\t\t\t<td><input class=\"btn btn-primary\" type='button' onclick=\"searchLocation(" + num + ")\" value=\"검색\"></td>\n" +
+                "\t\t\t\t\t\t\t\t\t</tr>\n" +
+                "\t\t\t\t\t\t\t\t</table>\n" +
+                "\t\t\t\t\t\t\t</form>\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t</div>\n" +
+                "\t\t\t\t\n" +
+                "\t\t\t\t<!-- 섬네일 -->\n" +
+                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<span>섬네일</span>\n" +
+                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
+                "\t\t\t\t\t\t\t<div class=\"img_wrap\">\n" +
+                "\t\t\t\t\t\t\t\t<img style=\"width: 70%;\" id=\"img" + num + "\" />\n" +
+                "\t\t\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t\n" +
+                "\t\t\t\t\t<!-- Kakao Map Session -->\n" +
+                "\t\t\t\t\t<div class=\"col-sm\">\n" +
+                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
+                "\t\t\t\t\t\t\t<div id=\"map-" + num + "\" style=\"width: 100%; height:350px;\"></div>\n" +
+                "\t\t\t\t\t\t</div>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t</div>\n" +
+                "\t\t\t\t<br>\n" +
+                "\t\t\t</div>"
+
+        new_photo.innerHTML = form_div;
+        form.appendChild(new_photo);
+        $("post-upload-form").serialize();
+
+        init_map(num);
+    }
+</script>
+
 <!-- 지도 스크립트 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b29e5f1a06b5ed964627df8f7e9c4b9&libraries=services"></script>
+
 <script>
-    // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-    var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+    function make_map_option() {
+        return {
+            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+    }
 
-    var mapContainer = document.getElementById('map-1'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
-            };
+    function make_map_container(num) {
+        var mapContainer = document.getElementById('map-' + num); // 지도를 표시할 div
 
-    // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+        return mapContainer;
+    }
 
-    // 장소 검색 객체를 생성합니다
-    var ps = new kakao.maps.services.Places();
+    function init_map(num) {
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(make_map_container(num), make_map_option());
+        map.relayout();
+    }
 
-    // 키워드로 장소를 검색합니다
-    ps.keywordSearch('목포 시청', placesSearchCB);
-    map.relayout();
+    init_map(1);
 
     // 키워드 검색 완료 시 호출되는 콜백함수 입니다
-    function placesSearchCB (data, status, pagination) {
+    function placesSearchCB (data, status) {
         if (status === kakao.maps.services.Status.OK) {
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
             // LatLngBounds 객체에 좌표를 추가합니다
@@ -151,10 +225,17 @@
     }
 
     // 지도에 마커를 표시하는 함수입니다
-    function displayMarker(place, id) {
+    function displayMarker(place, id, num) {
+        // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+        // TODO: NULL 발생 지점
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(make_map_container(num), make_map_option());
+
         // 마커를 생성하고 지도에 표시합니다
         var marker = new kakao.maps.Marker({
-            map: map,
+            map: new kakao.maps.Map(make_map_container(num), make_map_option()),
             position: new kakao.maps.LatLng(place.y, place.x)
         });
 
@@ -174,8 +255,8 @@
         });
     }
 
-    function searchLocation() {
-        let inputValue = document.getElementById("placename").value;
+    function searchLocation(num) {
+        let inputValue = document.getElementById("placename-" + num).value;
 
         // 장소 검색 객체를 생성합니다
         var ps = new kakao.maps.services.Places();
@@ -222,149 +303,4 @@
         });
     }
 </script>
-
-<!-- <body>
-	<div class="">
-		<div class="">
-			<div class="">
-				<div>
-					<img src="./loginLogo.png" alt="x" class="image">
-				</div>
-				<br />
-				<form action="/image/upload" method="post" enctype="multipart/form-data"></form>
-				<h3 id="header-1">1번째 사진</h3>
-					<div class="text">
-
-					</div>
-					<table class="table">
-						<tr>
-							<td><input id="input_img" type="file" name="file" placeholder="사진파일"></td>
-						</tr>
-						<tr>
-							<td>
-								<div class="img_wrap">
-									<img id="img" />
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="text" name="content" placeholder="게시글 내용"></td>
-						</tr>
-						<tr>
-							<td><input type="text" name="location" value="" placeholder="위치" readonly>
-                                <div id="map" style="width:270px; height:140px;margin:0 auto;"></div>
-                            </td>
-						</tr>
-						<tr>
-							<td><input type="text" name="tags" placeholder="#태그"></td>
-						</tr>
-					</table>
-
-                    <input type="hidden" name="latitude" value="{{latitude}}"/>
-                    <input type="hidden" name="longitude" value="{{longitude}}"/>
-					<input type="submit" value="업로드">
-				</form>
-
-			</div>
-			<div class="smallbox">
-				<div class=text>
-					<a href="javascript:window.history.back()" class="under1">뒤로가기</a>
-				</div>
-			</div>
-		</div>
-    </div>
-	<script>
-		var sel_file;
-		$(document).ready(function() {
-			$('#input_img').on("change", handleImgFileSelect);
-		});
-		function handleImgFileSelect(e) {
-			var files = e.target.files;
-			var filesArr = Array.prototype.slice.call(files);
-			filesArr.forEach(function(f) {
-				if (!f.type.match("image.*")) {
-					alert("확장자는 이미지 확장자만 가능합니다.");
-					return;
-				}
-				sel_file = f;
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					$('#img').attr('src', e.target.result);
-				}
-				reader.readAsDataURL(f);
-			});
-		}
-	</script>
-
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1b29e5f1a06b5ed964627df8f7e9c4b9&libraries=services"></script>
-    <script>
-        // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                mapOption = {
-                    center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-                    level: 3 // 지도의 확대 레벨
-                };
-        // 지도를 생성합니다
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 마커 생성
-        var markerPosition = new kakao.maps.LatLng(37.566826, 126.9786567)
-
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        })
-        // 마커 표시
-        marker.setMap(map);
-        //인포윈도우 내용,위치
-        var iwContent = '<div style="padding:5px; font-size:12px;">TEST</div>',
-                iwPosition = new kakao.maps.LatLng(37.566826, 126.9786567)
-        //윈포윈도우 생성
-        var infowinodw = new kakao.maps.InfoWindow({
-            position : iwPosition,
-            content : iwContent
-        })
-        //마커 위 윈포윈도우 표시
-        infowinodw.open(map, marker);
-
-    </script>
-<footer>
-	<span class="footer__copyright">© 2021 ITER</span>
-</footer>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$cog = $(".fa-cog"),
-		$overlay = $(".profile__overlay"),
-		$closeBtn = $(".fa-times"),
-		$cancelBtn = $("#cancel"),
-		$logoutBtn = $("#logout");
-
-	$cog.click(function() {
-		$overlay.fadeIn();
-	});
-
-	$closeBtn.click(closePopup);
-	$cancelBtn.click(closePopup);
-
-	function closePopup() {
-		$overlay.fadeOut();
-	}
-
-	$logoutBtn.click(function() {
-		closePopup();
-	});
-	});
-
-	// 모달창
-	$(".follow_popup").click(function (){
-		$("#modal").addClass("active");
-	});
-
-	$(".follow_popup_close button").click(function (){
-		$("#modal").removeClass("active");
-	});
-</script>
-</body> -->
 </html>
