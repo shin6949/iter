@@ -7,7 +7,7 @@
     <title>Iter - 게시글 업로드</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/static/favicon.ico">
+    <link rel="shortcut icon" href="{{storageUrl}}/static/favicon.ico">
     <link rel="stylesheet" href="./styles.css">
     <!-- <link rel="stylesheet" href="./image-upload.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-sm">
             <a href="/">
-                <img src="./loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
+                <img src="{{storageUrl}}/static/loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
             </a>
             <h2 style="text-align: left; margin-top: 10px;">게시글 업로드</h2>
         </div>
@@ -89,26 +89,31 @@
                     <input style="width: 200px;" type="text" class="form-control" id="location-name-1" readonly />
                 </div>
 
-                <input type="hidden" name="latitude-1" value=""/>
-                <input type="hidden" name="longitude-1" value=""/>
+                <input type="hidden" id="latitude-1" name="latitude-1" value="" readonly/>
+                <input type="hidden" id="longitude-1" name="longitude-1" value="" readonly/>
             </div>
             <br>
         </div>
 
         <!-- 사진 추가/삭제 버튼 -->
         <div class="container" style="margin: 25px;">
-            <button style="margin: 10px 0px 10px 0px;" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
-            <button style="margin: 10px 0px 10px 10px;" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
+            <button style="margin: 10px 0 10px 0;" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
+            <button style="margin: 10px 0 10px 10px;" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
         </div>
 
         <!-- 게시글 입력 -->
         <div class="container border border-5" style="margin: 20px;">
             <label for="content" style="margin-top: 5px;"><h2>여행 코스 소개</h2></label>
-            <textarea cols="100" rows="10" class="form-control" id="content" name="content"
-                      placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required></textarea>
+            <textarea cols="100" rows="10" class="form-control" id="content" name="content" placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required>
+            </textarea>
+            <br>
         </div>
+
+        <input class="btn btn-primary" type="submit" onclick="this.submit()" value="업로드">
+        <button onclick="javascript:window.history.back()" type="button" class="btn btn-danger">뒤로</button>
     </form>
 </div>
+<br><br>
 </body>
 
 <!-- 사진 폼 추가 스크립트 -->
@@ -124,61 +129,57 @@
         const form = document.getElementById("post-upload-form");
         const new_photo = document.createElement('div');
 
-        new_photo.innerHTML = "<div class=\"container border border-5\" id=\"image-" + num + "\" style=\"margin: 20px;\">\n" +
-                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<h3>" + num + "번째 사진</h3>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<h3>위치 찾기</h3>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t</div>\n" +
-                "\n" +
-                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
-                "\t\t\t\t\t<!-- File Upload Input -->\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
-                "\t\t\t\t\t\t\t<label for=\"input-img-" + num + "\">사진: </label>\n" +
-                "\t\t\t\t\t\t\t<input type=\"file\" class=\"form-control-file\" id=\"input-img-" + num + "\">\n" +
-                "\t\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t\n" +
-                "\t\t\t\t\t<!-- Kakao Map Place SearchBar -->\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
-                "\t\t\t\t\t\t\t<form>\n" +
-                "\t\t\t\t\t\t\t\t<table>\n" +
-                "\t\t\t\t\t\t\t\t\t<tr>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<td><input class=\"form-control\" type=\"text\" id=\"placename-" + num + "\" placeholder=\"찾을 위치를 입력하세요.\" value=\"\"></td>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<td><input class=\"btn btn-primary\" type='button' onclick=\"searchLocation(" + num + ")\" value=\"검색\"></td>\n" +
-                "\t\t\t\t\t\t\t\t\t</tr>\n" +
-                "\t\t\t\t\t\t\t\t</table>\n" +
-                "\t\t\t\t\t\t\t</form>\n" +
-                "\t\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t</div>\n" +
-                "\t\t\t\t\n" +
-                "\t\t\t\t<!-- 섬네일 -->\n" +
-                "\t\t\t\t<div class=\"row\" style=\"margin-top: 10px;\">\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<span>섬네일</span>\n" +
-                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
-                "\t\t\t\t\t\t\t<div class=\"img_wrap\">\n" +
-                "\t\t\t\t\t\t\t\t<img style=\"width: 70%;\" id=\"img-" + num + "\" />\n" +
-                "\t\t\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t\n" +
-                "\t\t\t\t\t<!-- Kakao Map Session -->\n" +
-                "\t\t\t\t\t<div class=\"col-sm\">\n" +
-                "\t\t\t\t\t\t<div class=\"form-group\">\n" +
-                "\t\t\t\t\t\t\t<div id=\"map-" + num + "\" style=\"width: 100%; height:350px;\"></div>\n" +
-                "\t\t\t\t\t\t</div>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t</div>\n" +
-                "\t\t\t\t<br>\n" +
-                "\t\t\t</div>";
+        new_photo.innerHTML = '<div class="container border border-5" id="image-' + num + '" style="margin: 20px;">\n' +
+                '<div class="row" style="margin-top: 10px;">\n' +
+                '<div class="col-sm">\n' +
+                '<h3>' + num + '번째 사진</h3>\n' +
+                '</div>\n' +
+                '<div class="col-sm">\n' +
+                '<h3>위치 찾기</h3>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '<div class="row" style="margin-top: 10px;">\n' +
+                '<div class="col-sm">\n' +
+                '<div class="form-group">\n' +
+                '<label for="input-img-' + num + '">사진: </label>\n' +
+                '<input type="file" class="form-control-file" id="input-img-' + num + '">\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '<div class="col-sm">\n' +
+                '<div class="form-group">\n' +
+                '<form>\n' +
+                '<table>\n' +
+                '<tr>\n' +
+                ' <td><input class="form-control" type="text" id="placename-' + num + '" placeholder="찾을 위치를 입력하세요." value=""></td>\n' +
+                ' <td><input class="btn btn-primary" type=\'button\' onclick="searchLocation(' + num + ')" value="검색"></td>\n' +
+                '</tr>\n' +
+                '</table>\n' +
+                '</form>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '<div class="row" style="margin-top: 10px;">\n' +
+                '<div class="col-sm">\n' +
+                '<span>섬네일</span>\n' +
+                '<div class="form-group">\n' +
+                '<div class="img_wrap">\n' +
+                '<img style="width: 70%;" id="img-' + num + '" />\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '<div class="col-sm">\n' +
+                '<div class="form-group">\n' +
+                '<div id="map-' + num + '" style="width: 100%; height:350px;"></div>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '<div id="selected-location-' + num + '" class="row" style="margin: 10px;">\n' +
+                '<input style="width: 200px;" type="text" class="form-control" id="location-name-' + num + '" readonly />\n' +
+                '</div>\n' +
+                '<input type="hidden" id="latitude-' + num + '" name="latitude-' + num + '"/>\n' +
+                '<input type="hidden" id="longitude-' + num + '" name="longitude-' + num + '"/>\n' +
+                '</div>\n' +
+                '<br>\n' +
+                '</div>\n';
         form.appendChild(new_photo);
 
         // on-change 이벤트 추가
@@ -297,10 +298,10 @@
         kakao.maps.event.addListener(marker, 'click', function() {
             // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
             infowindow.setContent(
-                    '<div id=\"place-' + id +'\"style="width:100%; height: 100%; padding:5px; font-size:14px;">'
-                    + place.place_name +
+                    '<div id=\"place-' + current_num + '-' + id +'\"style="width:100%; height: 100%; padding:5px; font-size:14px;"' +
+                    'data-location-name=\"' + place.place_name + '\"' + 'data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\">' + place.place_name +
                     '<br>' +
-                    '<button type="button" style="float: right;" class="btn btn-primary" value="선택" onclick=\"set_location(' + current_num + ',' + id + ')\" data-lot=\"' + place.x + '\" data-lat=\"' + place.y + '\">선택</button>' +
+                    '<button type="button" style="float: right;" class="btn btn-primary" value="선택" onclick=\"set_location(' + current_num + ',' + id + ')\">선택</button>' +
                     '<br>' +
                     '</div>');
             infowindow.open(map, marker);
@@ -322,11 +323,14 @@
 <!-- 위치 선택 -->
 <script>
     // TODO: 적재한 데이터 체크 (2)
-    function set_location(num, id) {
-        console.log("num: " + num + "\nlot: " + lot + "\nlat: " + lat + "\nname: " + name);
-        document.getElementById('latitude-' + num).value = lat;
-        document.getElementById('longitude-' + num).value = lot;
-        document.getElementById('location-name-' + num).value = name;
+    function set_location(num, place_id) {
+        console.log("num: " + num + " / place_id: " + place_id);
+
+        var place_div = document.getElementById('place-' + num + '-' + place_id);
+        // PROBLEM POINT!
+        document.getElementById('latitude-' + num).value = place_div.getAttribute("data-lat");
+        document.getElementById('longitude-' + num).value = place_div.getAttribute("data-lot");
+        document.getElementById('location-name-' + num).value = place_div.getAttribute("data-location-name");
     }
 </script>
 
@@ -347,6 +351,7 @@
         filesArr.forEach(function(f) {
             if (!f.type.match("image.*")) {
                 alert("확장자는 이미지 확장자만 가능합니다.");
+                e.target.value = "";
                 return;
             }
             sel_file = f;
