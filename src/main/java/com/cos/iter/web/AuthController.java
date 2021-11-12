@@ -2,6 +2,7 @@ package com.cos.iter.web;
 
 import com.cos.iter.service.UserService;
 import com.cos.iter.util.Logging;
+import com.cos.iter.util.Script;
 import com.cos.iter.web.dto.JoinReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @RequiredArgsConstructor
 @Controller
@@ -46,11 +52,25 @@ public class AuthController {
 	}
 
 	@PostMapping("/auth/join")
-	public String join(JoinReqDto joinReqDto) {
+	public String join(JoinReqDto joinReqDto, HttpServletResponse response) throws IOException {
 		log.info(logging.getClassName() + " / " + logging.getMethodName());
 		log.info(joinReqDto.toString());
 
-		userService.register(joinReqDto);
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html; charset=UTF-8");
+		switch (userService.register(joinReqDto)) {
+			case 0:
+				break;
+			case 1:
+				out.println(Script.back("중복된 유저네임 입니다."));
+				out.flush();
+				return null;
+			case 2:
+				out.println(Script.back("서버 내 에러가 발생하였습니다."));
+				out.flush();
+				return null;
+		}
+
 		return "redirect:/auth/loginForm";
 	}
 }

@@ -10,6 +10,7 @@ import com.cos.iter.web.dto.UserProfilePostRespDto;
 import com.cos.iter.web.dto.UserProfileRespDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -78,9 +81,13 @@ public class UserService {
 					}
 				});
 	}
-	
-	@Transactional
-	public void register(JoinReqDto joinReqDto) {
+
+	/*
+		return 0: 이상 없음
+		return 1: 중복 값 존재
+		return 2: 다른 에러
+	 */
+	public short register(JoinReqDto joinReqDto) {
 		log.info("서비스 회원가입 들어옴");
 		log.info("joinReqDto: " + joinReqDto);
 
@@ -88,7 +95,16 @@ public class UserService {
 		log.info("encPassword : " + encPassword);
 		joinReqDto.setPassword(encPassword);
 
-		userRepository.save(joinReqDto.toEntity());
+		try {
+			userRepository.save(joinReqDto.toEntity());
+		} catch (DataIntegrityViolationException dataIntegrityViolationException) {
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 2;
+		}
+
+		return 0;
 	}
 	
 	// 읽기 전용 트랜잭션
