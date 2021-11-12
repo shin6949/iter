@@ -24,30 +24,30 @@ public class AzureService {
     private String uploadFolder;
 
     public String uploadToCloudAndReturnFileName(MultipartFile file, String ContainerName) throws IOException {
-        final UUID uuid = UUID.randomUUID();
-        final String imageFilename = uuid + "_" + file.getOriginalFilename();
-        final Path imageFilepath = Paths.get(uploadFolder + imageFilename);
+            final UUID uuid = UUID.randomUUID();
+            final String imageFilename = uuid + "_" + file.getOriginalFilename();
+            final Path imageFilepath = Paths.get(uploadFolder + imageFilename);
 
-        try {
-            Files.write(imageFilepath, file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                Files.write(imageFilepath, file.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            final BlobContainerClient container = new BlobContainerClientBuilder()
+                    .connectionString(connectString)
+                    .containerName(ContainerName)
+                    .buildClient();
+
+            final BlobClient blob = container.getBlobClient(imageFilename);
+            blob.uploadFromFile(uploadFolder + imageFilename);
+
+            try {
+                Files.delete(imageFilepath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return imageFilename;
         }
-
-        final BlobContainerClient container = new BlobContainerClientBuilder()
-                .connectionString(connectString)
-                .containerName(ContainerName)
-                .buildClient();
-
-        final BlobClient blob = container.getBlobClient(imageFilename);
-        blob.uploadFromFile(uploadFolder + imageFilename);
-
-        try {
-            Files.delete(imageFilepath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return imageFilename;
     }
-}
