@@ -8,12 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="{{storageUrl}}/static/favicon.ico">
-    <link rel="stylesheet" href="./styles.css">
-    <!-- <link rel="stylesheet" href="./image-upload.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"> -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 </head>
 
 <body>
@@ -22,7 +17,7 @@
     <div class="row">
         <div class="col-sm">
             <a href="/">
-                <img src="./loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
+                <img src="{{storageUrl}}/static/loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
             </a>
             <h2 style="text-align: left; margin-top: 10px;">게시글 업로드</h2>
         </div>
@@ -31,85 +26,87 @@
 
 <div class="container">
     <form id="post-upload-form" action="/image/upload" method="post" enctype="multipart/form-data">
-        <!-- 1번 사진 업로드 폼 -->
-        <div class="container border border-5" id="image-1" style="margin: 20px;">
-            <div class="row" style="margin-top: 10px;">
-                <div class="col-sm">
-                    <h3>1번째 사진</h3>
-                </div>
+        <div class="container" id="photo-container">
+            <!-- 1번 사진 업로드 폼 -->
+            <div class="container border border-5" id="image-1" style="margin: 20px;">
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-sm">
+                        <h3>1번째 사진</h3>
+                    </div>
 
-                <div class="col-sm">
-                    <h3>위치 찾기</h3>
-                </div>
-            </div>
-
-            <div class="row" style="margin-top: 10px;">
-                <!-- File Upload Input -->
-                <div class="col-sm">
-                    <div class="form-group">
-                        <label for="input-img-1">사진: </label>
-                        <input type="file" class="form-control-file" id="input-img-1">
+                    <div class="col-sm">
+                        <h3>위치 찾기</h3>
                     </div>
                 </div>
 
-                <!-- Kakao Map Place SearchBar -->
-                <div class="col-sm">
-                    <div class="form-group">
-                        <table>
-                            <tr>
-                                <td><input class="form-control" type="text" id="placename-1" placeholder="찾을 위치를 입력하세요."></td>
-                                <td><button class="btn btn-primary" type='button' onclick="searchLocation(1)">검색</button></td>
-                            </tr>
-                        </table>
+                <div class="row" style="margin-top: 10px;">
+                    <!-- File Upload Input -->
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="input-img-1">사진: </label>
+                            <input type="file" name="file" class="form-control-file" id="input-img-1">
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- 섬네일 -->
-            <div class="row" style="margin-top: 10px;">
-                <div class="col-sm">
-                    <span>섬네일</span>
-                    <div class="form-group">
-                        <div class="img_wrap">
-                            <img style="width: 70%;" id="img-1" />
+                    <!-- Kakao Map Place SearchBar -->
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <table>
+                                <tr>
+                                    <td><input class="form-control" type="text" id="placename-1" placeholder="찾을 위치를 입력하세요."></td>
+                                    <td><button class="btn btn-primary" type='button' onclick="searchLocation(1)">검색</button></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kakao Map Session -->
-                <div class="col-sm">
-                    <div class="form-group">
-                        <div id="map-1" style="width: 100%; height:350px;"></div>
+                <!-- 섬네일 -->
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-sm">
+                        <span>섬네일</span>
+                        <div class="form-group">
+                            <div class="img_wrap">
+                                <img style="width: 70%;" id="img-1" />
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div id="selected-location-1" class="row" style="margin: 10px;">
-                    <input style="width: 200px;" type="text" class="form-control" id="location-name-1" readonly />
-                </div>
+                    <!-- Kakao Map Session -->
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <div id="map-1" style="width: 100%; height:350px;"></div>
+                        </div>
+                    </div>
 
-                <input type="hidden" id="latitude-1" name="latitude-1" value=""/>
-                <input type="hidden" id="longitude-1" name="longitude-1" value=""/>
+                    <div id="selected-location-1" class="row" style="margin: 10px;">
+                        <input style="width: 200px;" type="text" class="form-control" name="locationName" id="location-name-1" readonly />
+                    </div>
+
+                    <input type="hidden" id="latitude-1" name="latitude"/>
+                    <input type="hidden" id="longitude-1" name="longitude"/>
+                </div>
+                <br>
             </div>
-            <br>
         </div>
 
         <!-- 사진 추가/삭제 버튼 -->
         <div class="container" style="margin: 25px;">
-            <button style="margin: 10px 0px 10px 0px;" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
-            <button style="margin: 10px 0px 10px 10px;" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
+            <button style="margin: 10px 0px 10px 0px;" type="button" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
+            <button style="margin: 10px 0px 10px 10px;" type="button" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
         </div>
 
         <!-- 게시글 입력 -->
-        <div class="container border border-5" style="margin: 20px;">
+        <div class="container border border-5" style="margin: 10px;">
             <label for="content" style="margin-top: 5px;"><h2>여행 코스 소개</h2></label>
-            <textarea cols="100" rows="10" class="form-control" id="content" name="content"
-                      placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required>
-            </textarea>
+            <textarea cols="100" rows="10" class="form-control" id="content" name="content" placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required></textarea>
             <br>
+        </div>
 
+        <!-- 사진 추가/삭제 버튼 -->
+        <div class="container" style="margin: 10px;">
             <input class="btn btn-primary" type="submit" value="업로드">
             <button onclick="javascript:window.history.back()" type="button" class="btn btn-danger">뒤로</button>
-            <br>
         </div>
     </form>
 </div>
@@ -126,7 +123,7 @@
             return;
         }
 
-        const form = document.getElementById("post-upload-form");
+        const photo_container = document.getElementById("photo-container");
         const new_photo = document.createElement('div');
 
         new_photo.innerHTML = '<div class="container border border-5" id="image-' + num + '" style="margin: 20px;">\n' +
@@ -142,7 +139,7 @@
                 '<div class="col-sm">\n' +
                 '<div class="form-group">\n' +
                 '<label for="input-img-' + num + '">사진: </label>\n' +
-                '<input type="file" class="form-control-file" id="input-img-' + num + '">\n' +
+                '<input type="file" class="form-control-file" name="file" id="input-img-' + num + '">\n' +
                 '</div>\n' +
                 '</div>\n' +
                 '<div class="col-sm">\n' +
@@ -173,14 +170,14 @@
                 '</div>\n' +
                 '</div>\n' +
                 '<div id="selected-location-' + num + '" class="row" style="margin: 10px;">\n' +
-                '<input style="width: 200px;" type="text" class="form-control" id="location-name-' + num + '" readonly />\n' +
+                '<input style="width: 200px;" type="text" class="form-control" name="locationName" id="location-name-' + num + '" readonly />\n' +
                 '</div>\n' +
-                '<input type="hidden" id="latitude-' + num + '" name="latitude-' + num + '"/>\n' +
-                '<input type="hidden" id="longitude-' + num + '" name="longitude-' + num + '"/>\n' +
+                '<input type="hidden" id="latitude-' + num + '" name="latitude"/>\n' +
+                '<input type="hidden" id="longitude-' + num + '" name="longitude"/>\n' +
                 '</div>\n' +
                 '<br>\n' +
                 '</div>\n';
-        form.appendChild(new_photo);
+        photo_container.appendChild(new_photo);
 
         // on-change 이벤트 추가
         $('#input-img-' + num).on("change", handleImgFileSelect);
@@ -285,7 +282,7 @@
     // 지도에 마커를 표시하는 함수입니다
     function displayMarker(place, id, map) {
         // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
-        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+        var infowindow = new kakao.maps.InfoWindow({zIndex:1, removable:true});
 
         // 마커를 생성하고 지도에 표시합니다
         var marker = new kakao.maps.Marker({
