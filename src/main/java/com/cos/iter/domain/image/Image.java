@@ -21,6 +21,8 @@ public class Image {
 	private float latitude;
 	private float longitude;
 	private String locationName;
+	private String roadAddress;
+	private String kakaoMapUrl;
 
 	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_IMAGE_POST_ID"))
