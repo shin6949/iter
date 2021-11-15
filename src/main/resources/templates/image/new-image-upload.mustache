@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-sm">
             <a href="/">
-                <img src="{{storageUrl}}/static/loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
+                <img src="./loginLogo.png" alt="x" style="vertical-align:middle; float:left;" class="image">
             </a>
             <h2 style="text-align: left; margin-top: 10px;">게시글 업로드</h2>
         </div>
@@ -55,14 +55,12 @@
                 <!-- Kakao Map Place SearchBar -->
                 <div class="col-sm">
                     <div class="form-group">
-                        <form>
-                            <table>
-                                <tr>
-                                    <td><input class="form-control" type="text" id="placename-1" placeholder="찾을 위치를 입력하세요." value=""></td>
-                                    <td><input class="btn btn-primary" type='button' onclick="searchLocation(1)" value="검색"></td>
-                                </tr>
-                            </table>
-                        </form>
+                        <table>
+                            <tr>
+                                <td><input class="form-control" type="text" id="placename-1" placeholder="찾을 위치를 입력하세요."></td>
+                                <td><button class="btn btn-primary" type='button' onclick="searchLocation(1)">검색</button></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -89,28 +87,30 @@
                     <input style="width: 200px;" type="text" class="form-control" id="location-name-1" readonly />
                 </div>
 
-                <input type="hidden" id="latitude-1" name="latitude-1" value="" readonly/>
-                <input type="hidden" id="longitude-1" name="longitude-1" value="" readonly/>
+                <input type="hidden" id="latitude-1" name="latitude-1" value=""/>
+                <input type="hidden" id="longitude-1" name="longitude-1" value=""/>
             </div>
             <br>
         </div>
 
         <!-- 사진 추가/삭제 버튼 -->
         <div class="container" style="margin: 25px;">
-            <button style="margin: 10px 0 10px 0;" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
-            <button style="margin: 10px 0 10px 10px;" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
+            <button style="margin: 10px 0px 10px 0px;" onclick="add_photo(2)" id="add-photo-btn" class="btn btn-primary">사진 추가</button>
+            <button style="margin: 10px 0px 10px 10px;" onclick="delete_photo()" id="del-photo-btn" class="btn btn-danger" hidden>x번째 사진 삭제</button>
         </div>
 
         <!-- 게시글 입력 -->
         <div class="container border border-5" style="margin: 20px;">
             <label for="content" style="margin-top: 5px;"><h2>여행 코스 소개</h2></label>
-            <textarea cols="100" rows="10" class="form-control" id="content" name="content" placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required>
+            <textarea cols="100" rows="10" class="form-control" id="content" name="content"
+                      placeholder="글을 입력해주세요. #을 이용하여 태그도 입력할 수 있습니다." required>
             </textarea>
             <br>
-        </div>
 
-        <input class="btn btn-primary" type="submit" onclick="this.submit()" value="업로드">
-        <button onclick="javascript:window.history.back()" type="button" class="btn btn-danger">뒤로</button>
+            <input class="btn btn-primary" type="submit" value="업로드">
+            <button onclick="javascript:window.history.back()" type="button" class="btn btn-danger">뒤로</button>
+            <br>
+        </div>
     </form>
 </div>
 <br><br>
