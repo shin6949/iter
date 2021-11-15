@@ -40,6 +40,8 @@ public class ImageService {
 						.latitude(imageReqDto.getLatitude().get(i))
 						.longitude(imageReqDto.getLongitude().get(i))
 						.locationName(imageReqDto.getLocationName().get(i))
+						.roadAddress(imageReqDto.getRoadAddress().get(i))
+						.kakaoMapUrl(imageReqDto.getKakaoMapUrl().get(i))
 						.sequence(i)
 						.url(imageFilename)
 						.build();
