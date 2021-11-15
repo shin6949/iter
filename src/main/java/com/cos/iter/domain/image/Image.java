@@ -17,12 +17,10 @@ public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	private String url;
-
 	private float latitude;
-
 	private float longitude;
+	private String locationName;
 
 	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name="post_id", foreignKey = @ForeignKey(name="FK_IMAGE_POST_ID"))
