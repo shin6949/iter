@@ -70,7 +70,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/iter:latest
-            ghcr.io/${{ github.repository_owner }}/iter:${{ env.RELEASE_VERSION }}
+#            ghcr.io/${{ github.repository_owner }}/iter:${{ env.RELEASE_VERSION }}
 
 #      - uses: appleboy/ssh-action@master
 #        with:
